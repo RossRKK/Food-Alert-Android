@@ -1,6 +1,5 @@
 package rossrkk.food_alert_android.profile;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import rossrkk.food_alert_android.Database;
+import rossrkk.food_alert_android.Reference;
 import rossrkk.food_alert_android.R;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -26,9 +25,9 @@ public class ProfileActivity extends AppCompatActivity {
     protected static final int OPTIONS = 3;
 
     //get the group ids to clear the radio button ids
-    protected static final int GROUP_OFFSET = MAX_NO_OF_CONDITIONS + Database.fieldNames.length * MAX_NO_OF_CONDITIONS;
+    protected static final int GROUP_OFFSET = MAX_NO_OF_CONDITIONS + Reference.fieldNames.length * MAX_NO_OF_CONDITIONS;
 
-    protected int[] profile = new int[Database.fieldNames.length];
+    protected int[] profile = new int[Reference.fieldNames.length];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +46,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         SharedPreferences.Editor editor = sharedPref.edit();
         //submit the fields to the thing
-        for (int i = 0; i < Database.fieldNames.length; i++) {
+        for (int i = 0; i < Reference.fieldNames.length; i++) {
             System.out.println(profile[i]);
-            editor.putInt(Database.fieldNames[i], profile[i]);
+            editor.putInt(Reference.fieldNames[i], profile[i]);
             editor.commit();
         }
 
@@ -65,15 +64,15 @@ public class ProfileActivity extends AppCompatActivity {
         //get the preferences handler
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         //set the default value
-        int defaultValue = Database.UNKNOWN;
+        int defaultValue = Reference.UNKNOWN;
 
         //create a new Table
         TableLayout ll = (TableLayout) findViewById(R.id.table);
 
         //loop through each intolerance we use
-        for (int i = 0; i < Database.fieldNamesFormatted.length; i++) {
+        for (int i = 0; i < Reference.fieldNamesFormatted.length; i++) {
             //get the saved value of the profile
-            profile[i] = sharedPref.getInt(Database.fieldNames[i], defaultValue);
+            profile[i] = sharedPref.getInt(Reference.fieldNames[i], defaultValue);
 
             //create a new table row
             TableRow row = new TableRow(this);
@@ -83,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             //create a new text view
             TextView tv = new TextView(this);
-            tv.setText(Database.fieldNamesFormatted[i]);
+            tv.setText(Reference.fieldNamesFormatted[i]);
 
             //setup the radio buttons
             RadioGroup group = new RadioGroup(this);
@@ -104,11 +103,11 @@ public class ProfileActivity extends AppCompatActivity {
 
             //turn on the previous settings
             switch (profile[i]) {
-                case Database.ANY: any.toggle();
+                case Reference.ANY: any.toggle();
                     break;
-                case Database.TRACE: traces.toggle();
+                case Reference.TRACE: traces.toggle();
                     break;
-                case Database.NONE: none.toggle();
+                case Reference.NONE: none.toggle();
                     break;
             }
 
@@ -125,14 +124,14 @@ public class ProfileActivity extends AppCompatActivity {
 
                     //figure out the amount this represents
                     int in = checkedId % OPTIONS;
-                    int amount = Database.UNKNOWN;
+                    int amount = Reference.UNKNOWN;
                     //re-map the values because currently 2 is traces and 1 is any amount
                     switch (in) {
-                        case 1: amount = Database.ANY;
+                        case 1: amount = Reference.ANY;
                             break;
-                        case 2: amount = Database.TRACE;
+                        case 2: amount = Reference.TRACE;
                             break;
-                        case 0: amount = Database.NONE;
+                        case 0: amount = Reference.NONE;
                             break;
                     }
 

@@ -1,10 +1,12 @@
 package rossrkk.food_alert_android;
 
+import android.graphics.Color;
+
 /**
  * Created by rossrkk on 25/11/16.
  */
 
-public class Database {
+public class Reference {
     public static final String[] fieldNames = { "containsNuts", "containsDairy" };
     public static final String[] fieldNamesFormatted = { "Nuts", "Dairy"};
 
@@ -15,4 +17,8 @@ public class Database {
 
     public static final int COMPATIBLE = 1;
     public static final int INCOMPATIBLE = 0;
+
+    public static final int RED = Color.rgb(255, 84, 104);
+    public static final int GREEN = Color.rgb(77, 250, 144);
+    public static final int YELLOW = Color.rgb(250, 190, 77);
 }
