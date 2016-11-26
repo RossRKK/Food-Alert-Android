@@ -36,7 +36,7 @@ public class Request implements Runnable {
             for (int i = 0; i < out.length; i++) {
                 out[i] = Database.UNKNOWN;
             }
-            String urlStr = "http://138.251.245.89:8080/" + message;
+            String urlStr = "http://138.251.247.74:8080/" + message;
             try {
                 URL url = new URL(urlStr);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

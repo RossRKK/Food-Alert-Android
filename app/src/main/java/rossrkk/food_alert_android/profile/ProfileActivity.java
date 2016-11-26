@@ -17,18 +17,18 @@ import rossrkk.food_alert_android.Database;
 import rossrkk.food_alert_android.R;
 
 public class ProfileActivity extends AppCompatActivity {
-    private static final String ANY = "Any amount ";
-    private static final String TRACES = "Traces ";
-    private static final String NONE = "None ";
+    protected static final String ANY = "Any amount ";
+    protected static final String TRACES = "Traces ";
+    protected static final String NONE = "None ";
 
-    private static final int MAX_NO_OF_CONDITIONS = 100;
+    protected static final int MAX_NO_OF_CONDITIONS = 100;
 
-    private static final int OPTIONS = 3;
+    protected static final int OPTIONS = 3;
 
     //get the group ids to clear the radio button ids
-    private static final int GROUP_OFFSET = MAX_NO_OF_CONDITIONS + Database.fieldNames.length * MAX_NO_OF_CONDITIONS;
+    protected static final int GROUP_OFFSET = MAX_NO_OF_CONDITIONS + Database.fieldNames.length * MAX_NO_OF_CONDITIONS;
 
-    private int[] profile = new int[Database.fieldNames.length];
+    protected int[] profile = new int[Database.fieldNames.length];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
