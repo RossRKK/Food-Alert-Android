@@ -28,6 +28,21 @@ public class JSONify {
         return data;
     }
 
+    public static String toJSON(int[] data) {
+        String out = "{";
+
+        for (int i = 0; i < Reference.fieldNames.length && i < data.length; i++) {
+            out += "\"" + Reference.fieldNames[i] + "\": " + data[i];
+
+            if (i != Reference.fieldNames.length - 1) {
+                out += ",";
+            }
+        }
+
+        out += "}";
+        return out;
+    }
+
     public static String formatData(int[] data) {
         String out = "";
         for (int i = 0; i < Reference.fieldNames.length; i++) {

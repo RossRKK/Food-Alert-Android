@@ -11,6 +11,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import rossrkk.food_alert_android.request.JSONify;
+
 public class DisplayMessageActivity extends AppCompatActivity {
 
     private TextView textView;
@@ -63,7 +65,8 @@ public class DisplayMessageActivity extends AppCompatActivity {
       * @param view
      */
     public void submit(View view) {
-        //TODO send the push request
+        String json = JSONify.toJSON(data);
+        System.out.println(json);
     }
 
     /**
