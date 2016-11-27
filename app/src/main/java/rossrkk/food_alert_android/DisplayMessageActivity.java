@@ -17,17 +17,18 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
     private TextView textView;
 
-    protected static final String ANY = "Contains ";
-    protected static final String TRACES = "Traces ";
-    protected static final String NONE = "None ";
+    protected static final String ANY = "Contains Non-Trace Amounts";
+    protected static final String TRACES = "Contains Traces";
+    protected static final String NONE = "Contains None";
 
-    private static final String ADD_DATA_TEXT = "Please tell us whether this food contains: ";
+    private static final String ADD_DATA_TEXT = "Please tell us what this food contains: ";
 
     protected static final int MAX_NO_OF_CONDITIONS = 100;
 
     protected static final int OPTIONS = 3;
 
     private int[] data;
+    private String ean;
 
 
     //get the group ids to clear the radio button ids
@@ -40,6 +41,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         data = intent.getIntArrayExtra(MainActivity.DATA);
+        ean = intent.getStringExtra(MainActivity.EAN);
         int canEat = intent.getIntExtra(MainActivity.CAN_EAT, Reference.UNKNOWN);
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.display_layout);
@@ -66,7 +68,12 @@ public class DisplayMessageActivity extends AppCompatActivity {
      */
     public void submit(View view) {
         String json = JSONify.toJSON(data);
-        System.out.println(json);
+        //System.out.println(json);
+        Request r = new Request(ean, "post", null);
+        r.execute(json);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     /**

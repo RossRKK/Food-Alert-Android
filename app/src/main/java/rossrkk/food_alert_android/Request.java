@@ -5,11 +5,14 @@ import android.os.AsyncTask;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 
 import rossrkk.food_alert_android.request.JSONify;
+
 
 /**
  * Created by rossrkk on 15/11/16.
@@ -19,6 +22,9 @@ public class Request extends AsyncTask<String, Void, int[]> {
     private String message;
     private String method;
     private MainActivity called;
+
+    private static final String URL = "138.251.247.74";
+    private static final int PORT = 8080;
 
     public  Request(String message, String method, MainActivity called) {
         this.message = message;
@@ -43,19 +49,19 @@ public class Request extends AsyncTask<String, Void, int[]> {
 
 
     @Override
-    protected int[] doInBackground(String... urls) {
-        return request();
+    protected int[] doInBackground(String... json) {
+        return request(json[0]);
     }
 
 
-    public int[] request() {
+    public int[] request(String json) {
         int[] out = new int[Reference.fieldNames.length];
         for (int i = 0; i < out.length; i++) {
             out[i] = Reference.UNKNOWN;
         }
         if (method.equalsIgnoreCase("GET")) {
 
-            String urlStr = "http://138.251.247.74:8080/" + message;
+            String urlStr = "http://" + URL + ":" + PORT + "/" + message;
             try {
                 URL url = new URL(urlStr);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -65,12 +71,37 @@ public class Request extends AsyncTask<String, Void, int[]> {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if (method.equalsIgnoreCase("POST")) {
+            try {
+                Socket s = new Socket(URL, PORT);
+
+                PrintWriter outputPost = new PrintWriter(s.getOutputStream());
+                headers(outputPost);
+                outputPost.print(json);
+
+                outputPost.flush();
+                outputPost.close();
+
+                s.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return out;
     }
 
+    public void headers(PrintWriter out) {
+        // Send the headers
+        out.print("POST /" + message + " HTTP/1.1\r\n"); // Version & status code
+        out.print("Content-Type: application/JSON\r\n"); // The type of data
+        out.print("Connection: close\r\n"); // Will close stream
+        out.print("\r\n"); // End of headers
+    }
+
     @Override
     protected void onPostExecute(int[] result) {
-        called.setData(result);
+        if (called != null) {
+            called.setData(result);
+        }
     }
 }

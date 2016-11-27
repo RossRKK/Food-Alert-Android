@@ -17,6 +17,7 @@ import static rossrkk.food_alert_android.Reference.YELLOW;
 public class MainActivity extends AppCompatActivity {
     public final static String DATA = "rossrkk.food_alert_android.DATA";
     public final static String CAN_EAT = "rossrkk.food_alert_android.CAN_EAT";
+    public final static String EAN = "rossrkk.food_alert_android.EAN";
 
     private int[] profile = new int[Reference.fieldNames.length];
     private int[] data;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void unknown(int canEat) {
         Intent intent = new Intent(this, rossrkk.food_alert_android.DisplayMessageActivity.class);
+        intent.putExtra(EAN, ean);
         intent.putExtra(CAN_EAT, canEat);
         intent.putExtra(DATA, data);
         startActivity(intent);
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     public void get(String message) {
         //new Thread(new Request(message, "get", this)).start();
         Request r = new Request(message, "get", this);
-        r.execute();
+        r.execute("nothing to see here");
     }
 
     public void setData(int[] data) {
