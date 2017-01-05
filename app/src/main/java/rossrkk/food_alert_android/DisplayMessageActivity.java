@@ -11,7 +11,18 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import rossrkk.food_alert_android.request.JSONify;
+import rossrkk.food_alert_android.request.Request;
 
 public class DisplayMessageActivity extends AppCompatActivity {
 
@@ -67,11 +78,27 @@ public class DisplayMessageActivity extends AppCompatActivity {
       * @param view
      */
     public void submit(View view) {
-        String json = JSONify.toJSON(data);
-        //System.out.println(json);
-        Request r = new Request(ean, "post", null);
-        r.execute(json);
+        //String json = JSONify.toJSON(data);
+        String encodedData = JSONify.encode(data);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = Reference.BASE_URL + "/" + ean + encodedData;
 
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //TODO add an alert here
+                System.out.println("GET request error");
+            }
+        });
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
@@ -87,7 +114,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
         //loop through each intolerance we use
         for (int i = 0; i < Reference.fieldNamesFormatted.length; i++) {
-            if (data[i] == -1) {
+            if (data[i] == Reference.UNKNOWN) {
                 //create a new table row
                 TableRow row = new TableRow(this);
 

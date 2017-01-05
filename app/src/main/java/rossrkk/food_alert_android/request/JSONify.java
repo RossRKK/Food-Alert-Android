@@ -35,11 +35,28 @@ public class JSONify {
             out += "\"" + Reference.fieldNames[i] + "\": " + data[i];
 
             if (i != Reference.fieldNames.length - 1) {
-                out += ",";
+                out += ", ";
             }
         }
 
         out += "}";
+
+        return out;
+    }
+
+    public static String encode(int[] data) {
+        String out = "?";
+
+        for (int i = 0; i < Reference.fieldNames.length && i < data.length; i++) {
+            out += Reference.fieldNames[i] + "=" + data[i];
+
+            if (i != Reference.fieldNames.length - 1) {
+                out += "&";
+            }
+        }
+
+        //out += "}";
+
         return out;
     }
 

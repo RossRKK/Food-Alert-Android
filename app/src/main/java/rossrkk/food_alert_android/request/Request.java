@@ -1,4 +1,4 @@
-package rossrkk.food_alert_android;
+package rossrkk.food_alert_android.request;
 
 import android.os.AsyncTask;
 
@@ -11,6 +11,8 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 
+import rossrkk.food_alert_android.MainActivity;
+import rossrkk.food_alert_android.Reference;
 import rossrkk.food_alert_android.request.JSONify;
 
 
@@ -23,8 +25,8 @@ public class Request extends AsyncTask<String, Void, int[]> {
     private String method;
     private MainActivity called;
 
-    private static final String URL = "138.251.247.74";
-    private static final int PORT = 8080;
+    private static final String URL = "food-alert.herokuapp.com";
+    private static final int PORT = 80;
 
     public  Request(String message, String method, MainActivity called) {
         this.message = message;
@@ -60,8 +62,7 @@ public class Request extends AsyncTask<String, Void, int[]> {
             out[i] = Reference.UNKNOWN;
         }
         if (method.equalsIgnoreCase("GET")) {
-
-            String urlStr = "http://" + URL + ":" + PORT + "/" + message;
+            String urlStr = "http://" + URL + ":" + PORT +  "/" + message;
             try {
                 URL url = new URL(urlStr);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -77,6 +78,7 @@ public class Request extends AsyncTask<String, Void, int[]> {
 
                 PrintWriter outputPost = new PrintWriter(s.getOutputStream());
                 headers(outputPost);
+                System.out.println(json);
                 outputPost.print(json);
 
                 outputPost.flush();
@@ -84,6 +86,7 @@ public class Request extends AsyncTask<String, Void, int[]> {
 
                 s.close();
             } catch (Exception e) {
+                System.out.println("ERROR DURING POST");
                 e.printStackTrace();
             }
         }
