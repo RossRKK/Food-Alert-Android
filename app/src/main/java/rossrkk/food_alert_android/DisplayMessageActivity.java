@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -47,6 +48,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         data = intent.getIntArrayExtra(MainActivity.DATA);
         ean = intent.getStringExtra(MainActivity.EAN);
+        String name = intent.getStringExtra(MainActivity.NAME);
         int canEat = intent.getIntExtra(MainActivity.CAN_EAT, Reference.UNKNOWN);
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.display_layout);
@@ -64,6 +66,8 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.title);
         textView.setTextSize(32f);
+        EditText nameBox = (EditText)findViewById(R.id.name);
+        nameBox.setText(name);
         generateTable();
     }
 
@@ -73,7 +77,9 @@ public class DisplayMessageActivity extends AppCompatActivity {
      * @param view
      */
     public void submit(View view) {
-        String encodedData = JSONify.encode(data);
+        EditText nameBox = (EditText)findViewById(R.id.name);
+        String name = nameBox.getText().toString();
+        String encodedData = JSONify.encode(name, data);
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = Reference.BASE_URL + "/" + ean + encodedData;
 

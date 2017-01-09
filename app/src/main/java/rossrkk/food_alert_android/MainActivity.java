@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,6 +26,7 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import java.util.List;
 
 import rossrkk.food_alert_android.profile.ProfileActivity;
+import rossrkk.food_alert_android.request.DataObj;
 import rossrkk.food_alert_android.request.JSONify;
 
 
@@ -32,11 +34,13 @@ public class MainActivity extends AppCompatActivity {
     public final static String DATA = "rossrkk.food_alert_android.DATA";
     public final static String CAN_EAT = "rossrkk.food_alert_android.CAN_EAT";
     public final static String EAN = "rossrkk.food_alert_android.EAN";
+    public final static String NAME = "rossrkk.food_alert_android.NAME";
 
     private int[] profile = new int[Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length];
     private int[] data;
 
     private int canEat;
+    private String name;
 
     private String ean;
     /**
@@ -85,11 +89,12 @@ public class MainActivity extends AppCompatActivity {
         get(ean);
     }
 
-    public void unknown(int canEat) {
+    public void unknown(int canEat, String name) {
         Intent intent = new Intent(this, rossrkk.food_alert_android.DisplayMessageActivity.class);
         intent.putExtra(EAN, ean);
         intent.putExtra(CAN_EAT, canEat);
         intent.putExtra(DATA, data);
+        intent.putExtra(NAME, name);
         startActivity(intent);
     }
 
@@ -98,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EAN, ean);
         intent.putExtra(CAN_EAT, canEat);
         intent.putExtra(DATA, data);
+        intent.putExtra(NAME, name);
         startActivity(intent);
     }
 
@@ -149,11 +155,13 @@ public class MainActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    public void setData(int[] data) {
-        this.data = data;
+    public void setData(DataObj data) {
+        this.data = data.getData();
+        this.name = data.getName();
         canEat = compareToProfile();
+        ((TextView)findViewById(R.id.name)).setText(name);
         if (!isComplete()) {
-            unknown(canEat);
+            unknown(canEat, name);
         }
     }
 

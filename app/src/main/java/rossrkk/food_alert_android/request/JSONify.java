@@ -1,5 +1,6 @@
 package rossrkk.food_alert_android.request;
 
+import rossrkk.food_alert_android.MainActivity;
 import rossrkk.food_alert_android.Reference;
 
 /**
@@ -9,22 +10,20 @@ import rossrkk.food_alert_android.Reference;
 public class JSONify {
 
     // produce an int array from a json string
-    public static int[] fromJSON(String json) {
+    public static DataObj fromJSON(String json) {
+        String nameField = "name";
+
+        String name = valueOfField(nameField, json);
+        name = name.substring(1, name.length()-1);
+
         // declare an integer array with an element for each field
         int[] data = new int[Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length];
         int dataIndex = 0;
         // loop through each field
         for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
-            // get the substring of the json that is relevant
-
-            int index = json.indexOf(Reference.binaryFieldNames[i]) + Reference.binaryFieldNames[i].length() + 3;
-            String subStr = json.substring(index, index + 1);
-            if (subStr.contains("-")) {
-                subStr = json.substring(index, index + 2);
-            }
-
+            // get the substring of the json that is relevan
             // parse the string to an integer
-            data[dataIndex] = Integer.parseInt(subStr);
+            data[dataIndex] = Integer.parseInt(valueOfField(Reference.binaryFieldNames[i], json));
             dataIndex++;
         }
 
@@ -32,83 +31,41 @@ public class JSONify {
         for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
             // get the substring of the json that is relevant
 
-            int index = json.indexOf(Reference.tertiaryFieldNames[i]) + Reference.tertiaryFieldNames[i].length() + 3;
-            String subStr = json.substring(index, index + 1);
-            if (subStr.contains("-")) {
-                subStr = json.substring(index, index + 2);
-            }
             // parse the string to an integer
-            data[dataIndex] = Integer.parseInt(subStr);
+            data[dataIndex] = Integer.parseInt(valueOfField(Reference.tertiaryFieldNames[i], json));
             dataIndex++;
         }
-        return data;
+        return new DataObj(data, name);
     }
 
-    public static String toJSON(int[] data) {
-        String out = "{";
-
-        for (int i = 0; i < Reference.tertiaryFieldNames.length && i < data.length; i++) {
-            out += "\"" + Reference.tertiaryFieldNames[i] + "\": " + data[i];
-
-            if (i != Reference.tertiaryFieldNames.length - 1) {
-                out += ", ";
-            }
+    private static String valueOfField(String fieldName, String json) {
+        int start = json.indexOf(fieldName) + fieldName.length();
+        int colon = json.indexOf(":", start);
+        int end = json.indexOf(",", colon);
+        if (end == -1) {
+            end = json.indexOf("}");
         }
-
-        out += "}";
-
-        return out;
+        String subStr = json.substring(colon+1, end);
+        subStr = subStr.trim();
+        return subStr;
     }
 
-    public static String encode(int[] data) {
-        String out = "?";
+    public static String encode(String name, int[] data) {
+        String out = "?name=" + name;
 
         int index = 0;
         for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
+            out += "&";
             out += Reference.binaryFieldNames[i] + "=" + data[index];
-
-            if (index != Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length - 1) {
-                out += "&";
-            }
-
             index++;
         }
 
         for (int i = 0; i < Reference.tertiaryFieldNames.length && i < data.length; i++) {
+            out += "&";
             out += Reference.tertiaryFieldNames[i] + "=" + data[index];
-
-            if (index != Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length - 1) {
-                out += "&";
-            }
             index++;
         }
         System.out.println(out);
-        return out;
-    }
-
-    public static String formatData(int[] data) {
-        String out = "";
-        for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
-            out += Reference.tertiaryFieldNamesFormatted[i] + ": ";
-            switch (data[i]) {
-                case -1:
-                    out += "Unknown";
-                    break;
-                case 0:
-                    out += "Yes";
-                    break;
-                case 1:
-                    out += "No";
-                    break;
-                default:
-                    out += "Error";
-                    break;
-            }
-
-            if (i < Reference.tertiaryFieldNames.length - 1) {
-                out += "\n";
-            }
-        }
         return out;
     }
 }
