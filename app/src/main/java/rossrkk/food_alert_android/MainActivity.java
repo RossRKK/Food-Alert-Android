@@ -68,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void reconfirm(View view) {
+        Intent intent = new Intent(this, rossrkk.food_alert_android.DisplayMessageActivity.class);
+        intent.putExtra(EAN, ean);
+        intent.putExtra(CAN_EAT, canEat);
+        intent.putExtra(DATA, data);
+        startActivity(intent);
+    }
+
     public void switchToProfile(View view)  {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);

@@ -67,7 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         //change back to the main screen
         Intent intent = new Intent(this, rossrkk.food_alert_android.MainActivity.class);
-        //startActivity(intent);
+        startActivity(intent);
     }
 
     /**
