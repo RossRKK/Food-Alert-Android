@@ -5,10 +5,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -16,12 +16,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.BeepManager;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+
+import java.util.List;
 
 import rossrkk.food_alert_android.profile.ProfileActivity;
 import rossrkk.food_alert_android.request.JSONify;
-//import rossrkk.food_alert_android.request.Request;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadProfile();
+
+        //for barcode scanning
+        barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
+        barcodeView.decodeContinuous(callback);
+
+        beepManager = new BeepManager(this);
     }
 
 
@@ -145,44 +155,52 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
-    /*
-    Added for barcode scanning
-     */
-
     /**
-     * event handler for scan button
-     * @param view view of the activity
+     * Code that handles the barcodde scanner
      */
-    public void scanNow(View view){
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        integrator.setPrompt("Scan a barcode");
-        integrator.setResultDisplayDuration(0);
-        integrator.setWide();  // Wide scanning rectangle, may work better for 1D barcodes
-        //integrator.setCameraId(0);  // Use a specific camera of the device
-        integrator.initiateScan();
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private DecoratedBarcodeView barcodeView;
+    private BeepManager beepManager;
+    private String lastText;
+
+    private BarcodeCallback callback = new BarcodeCallback() {
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            if(result.getText() == null || result.getText().equals(lastText)) {
+                // Prevent duplicate scans
+                return;
+            }
+
+            lastText = result.getText();
+            barcodeView.setStatusText(result.getText());
+            beepManager.playBeepSoundAndVibrate();
+
+            ean = lastText;
+            get(ean);
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        barcodeView.resume();
     }
 
-    /**
-     * function handle scan result
-     * @param requestCode
-     * @param resultCode
-     * @param intent
-     */
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        //retrieve scan result
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+    @Override
+    protected void onPause() {
+        super.onPause();
 
-        if (scanningResult != null) {
-            //we have a result
-            String scanContent = scanningResult.getContents();
+        barcodeView.pause();
+    }
 
-            get(scanContent);
-
-        }else{
-            Toast toast = Toast.makeText(getApplicationContext(),"No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
-        }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 }

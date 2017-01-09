@@ -22,5 +22,6 @@ public class Reference {
     public static final int GREEN = Color.rgb(77, 250, 144);
     public static final int YELLOW = Color.rgb(250, 190, 77);
 
-    public static final String BASE_URL = "http://food-alert.herokuapp.com";
+    //public static final String BASE_URL = "http://food-alert.herokuapp.com";
+    public static final String BASE_URL = "http://192.168.1.174:8080";
 }
