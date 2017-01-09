@@ -29,6 +29,8 @@ public class DisplayMessageActivity extends AppCompatActivity {
     protected static final String ANY = "Contains Non-Trace Amounts";
     protected static final String TRACES = "Contains Traces";
     protected static final String NONE = "Contains None";
+    protected static final String NEGATIVE = "No ";
+    protected static final String POSITIVE = "Yes ";
 
     private static final String ADD_DATA_TEXT = "Please tell us what this food contains: ";
 
@@ -111,66 +113,144 @@ public class DisplayMessageActivity extends AppCompatActivity {
         textView.setText(ADD_DATA_TEXT);
 
         //loop through each intolerance we use
-        for (int i = 0; i < Reference.tertiaryFieldNamesFormatted.length; i++) {
-            if (data[i] == Reference.UNKNOWN) {
-                //create a new table row
-                TableRow row = new TableRow(this);
+        int index = 0;
 
-                TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-                row.setLayoutParams(lp);
+        for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
+            //create a new table row
+            TableRow row = new TableRow(this);
 
-                //create a new text view
-                TextView tv = new TextView(this);
-                tv.setText(Reference.tertiaryFieldNamesFormatted[i]);
+            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT);
+            row.setLayoutParams(lp);
 
-                //setup the radio buttons
-                RadioGroup group = new RadioGroup(this);
-                group.setId(i + GROUP_OFFSET);
+            //create a new text view
+            TextView tv = new TextView(this);
+            tv.setText(Reference.binaryFieldNamesFormatted[i]);
 
-                RadioButton any = new RadioButton(this);
-                any.setText(ANY);
-                RadioButton traces = new RadioButton(this);
-                traces.setText(TRACES);
-                RadioButton none = new RadioButton(this);
-                none.setText(NONE);
+            //setup the radio buttons
+            RadioGroup group = new RadioGroup(this);
+            group.setId(index + GROUP_OFFSET);
 
-                //add the radio buttons to the group
-                group.addView(any);
-                group.addView(traces);
-                group.addView(none);
+            RadioButton any = new RadioButton(this);
+            any.setText(POSITIVE);
 
-                //add the views to the row and then add the row
-                row.addView(tv);
-                row.addView(group);
-                ll.addView(row, i);
+            RadioButton none = new RadioButton(this);
+            none.setText(NEGATIVE);
 
-                //add listener for the radio button group
-                group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        //figure out the row the radio button was in
-                        int row = group.getId() - GROUP_OFFSET;
+            //add the radio buttons to the group
+            group.addView(any);
+            group.addView(none);
 
-                        //figure out the amount this represents
-                        int in = checkedId % OPTIONS;
-                        int amount = Reference.UNKNOWN;
-                        //re-map the values because currently 2 is traces and 1 is any amount
-                        switch (in) {
-                            case 1:
-                                amount = Reference.ANY;
-                                break;
-                            case 2:
-                                amount = Reference.TRACE;
-                                break;
-                            case 0:
-                                amount = Reference.NONE;
-                                break;
-                        }
 
-                        //set this in the data array
-                        data[row] = amount;
-                    }
-                });
+            //turn on the previous settings
+            switch (data[index]) {
+                case Reference.NONE: any.toggle();
+                    break;
+                case Reference.ANY: none.toggle();
+                    break;
             }
+
+            //add the views to the row and then add the row
+            row.addView(tv);
+            row.addView(group);
+            ll.addView(row,index);
+
+            //add listener for the radio button group
+            group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    //figure out the row the radio button was in
+                    int row = group.getId() - GROUP_OFFSET;
+                    //figure out the amount this represents
+                    int in = checkedId % 2;
+                    int amount = Reference.UNKNOWN;
+                    //re-map the values because currently 2 is traces and 1 is any amount
+                    switch (in) {
+                        case 1: amount = Reference.NONE;
+                            break;
+                        case 0: amount = Reference.ANY;
+                            break;
+                    }
+                    //set this in the profile array
+                    data[row] = amount;
+                }
+            });
+            index++;
+        }
+
+        for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
+            //create a new table row
+            TableRow row = new TableRow(this);
+
+            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+            row.setLayoutParams(lp);
+
+            //create a new text view
+            TextView tv = new TextView(this);
+            tv.setText(Reference.tertiaryFieldNamesFormatted[i]);
+
+            //setup the radio buttons
+            RadioGroup group = new RadioGroup(this);
+            group.setId(index + GROUP_OFFSET);
+
+
+            RadioButton any = new RadioButton(this);
+            any.setText(ANY);
+            RadioButton traces = new RadioButton(this);
+            traces.setText(TRACES);
+            RadioButton none = new RadioButton(this);
+            none.setText(NONE);
+
+            //add the radio buttons to the group
+            group.addView(any);
+            group.addView(traces);
+            group.addView(none);
+
+
+            //turn on the previous settings
+            switch (data[index]) {
+                case Reference.ANY:
+                    any.toggle();
+                    break;
+                case Reference.TRACE:
+                    traces.toggle();
+                    break;
+                case Reference.NONE:
+                    none.toggle();
+                    break;
+            }
+
+            //add the views to the row and then add the row
+            row.addView(tv);
+            row.addView(group);
+            ll.addView(row, index);
+
+            //add listener for the radio button group
+            group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    //figure out the row the radio button was in
+                    int row = group.getId() - GROUP_OFFSET;
+
+                    //figure out the amount this represents
+                    int in = (checkedId - (Reference.binaryFieldNames.length * 2)) % OPTIONS;
+                    int amount = Reference.UNKNOWN;
+                    //re-map the values because currently 2 is traces and 1 is any amount
+                    switch (in) {
+                        case 1:
+                            amount = Reference.ANY;
+                            break;
+                        case 2:
+                            amount = Reference.TRACE;
+                            break;
+                        case 0:
+                            amount = Reference.NONE;
+                            break;
+                    }
+                    //figure out the row the radio butto
+
+                    //set this in the profile array
+                    data[row] = amount;
+                }
+            });
+            index++;
         }
     }
 }

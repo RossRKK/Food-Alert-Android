@@ -11,7 +11,21 @@ public class JSONify {
     // produce an int array from a json string
     public static int[] fromJSON(String json) {
         // declare an integer array with an element for each field
-        int[] data = new int[Reference.tertiaryFieldNames.length];
+        int[] data = new int[Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length];
+        int dataIndex = 0;
+        // loop through each field
+        for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
+            // get the substring of the json that is relevant
+
+            int index = json.indexOf(Reference.binaryFieldNames[i]) + Reference.binaryFieldNames[i].length() + 3;
+            String subStr = json.substring(index, index + 1);
+            if (subStr.contains("-")) {
+                subStr = json.substring(index, index + 2);
+            }
+            // parse the string to an integer
+            data[dataIndex] = Integer.parseInt(subStr);
+            dataIndex ++;
+        }
 
         // loop through each field
         for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
@@ -23,7 +37,8 @@ public class JSONify {
                 subStr = json.substring(index, index + 2);
             }
             // parse the string to an integer
-            data[i] = Integer.parseInt(subStr);
+            data[dataIndex] = Integer.parseInt(subStr);
+            dataIndex++;
         }
         return data;
     }

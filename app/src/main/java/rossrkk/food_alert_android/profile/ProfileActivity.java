@@ -115,9 +115,9 @@ public class ProfileActivity extends AppCompatActivity {
 
             //turn on the previous settings
             switch (profile[index]) {
-                case Reference.ANY: any.toggle();
+                case Reference.NONE: any.toggle();
                     break;
-                case Reference.NONE: none.toggle();
+                case Reference.ANY: none.toggle();
                     break;
             }
 
@@ -136,9 +136,9 @@ public class ProfileActivity extends AppCompatActivity {
                     int amount = Reference.UNKNOWN;
                     //re-map the values because currently 2 is traces and 1 is any amount
                     switch (in) {
-                        case 1: amount = Reference.ANY;
+                        case 1: amount = Reference.NONE;
                             break;
-                        case 0: amount = Reference.NONE;
+                        case 0: amount = Reference.ANY;
                             break;
                     }
                     //set this in the profile array
