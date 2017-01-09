@@ -7,8 +7,11 @@ import android.graphics.Color;
  */
 
 public class Reference {
-    public static final String[] fieldNames = { "containsNuts", "containsDairy" };
-    public static final String[] fieldNamesFormatted = { "Nuts", "Dairy"};
+    public static final String[] tertiaryFieldNames = { "containsNuts", "containsDairy" };
+    public static final String[] binaryFieldNames = { "containsVegetarian", "containsVegan" };
+    public static final String[] contiuousFieldNames = { "sugar", "fat", "calories" };
+    public static final String[] tertiaryFieldNamesFormatted = { "Nuts", "Dairy" };
+    public static final String[] binaryFieldNamesFormatted = { "Vegetarian" , "Vegan" };
 
     public static final int ANY = 3;
     public static final int TRACE = 2;

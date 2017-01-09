@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     public final static String CAN_EAT = "rossrkk.food_alert_android.CAN_EAT";
     public final static String EAN = "rossrkk.food_alert_android.EAN";
 
-    private int[] profile = new int[Reference.fieldNames.length];
+    private int[] profile = new int[Reference.tertiaryFieldNames.length];
     private int[] data;
 
     private int canEat;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         int defaultValue = Reference.UNKNOWN;
         for (int i = 0; i < profile.length; i++) {
             //get the saved value of the profile
-            profile[i] = sharedPref.getInt(Reference.fieldNames[i], defaultValue);
+            profile[i] = sharedPref.getInt(Reference.tertiaryFieldNames[i], defaultValue);
         }
     }
 
@@ -158,8 +158,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Code that handles the barcodde scanner
      */
-
-    private static final String TAG = MainActivity.class.getSimpleName();
     private DecoratedBarcodeView barcodeView;
     private BeepManager beepManager;
     private String lastText;

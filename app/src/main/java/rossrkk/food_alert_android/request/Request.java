@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import rossrkk.food_alert_android.MainActivity;
 import rossrkk.food_alert_android.Reference;
-import rossrkk.food_alert_android.request.JSONify;
 
 
 /**
@@ -57,7 +56,7 @@ public class Request extends AsyncTask<String, Void, int[]> {
 
 
     public int[] request(String json) {
-        int[] out = new int[Reference.fieldNames.length];
+        int[] out = new int[Reference.tertiaryFieldNames.length];
         for (int i = 0; i < out.length; i++) {
             out[i] = Reference.UNKNOWN;
         }

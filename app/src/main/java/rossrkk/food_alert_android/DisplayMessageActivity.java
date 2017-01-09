@@ -14,15 +14,13 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import rossrkk.food_alert_android.request.JSONify;
-import rossrkk.food_alert_android.request.Request;
+
+import static rossrkk.food_alert_android.Reference.binaryFieldNames;
+import static rossrkk.food_alert_android.Reference.tertiaryFieldNames;
 
 public class DisplayMessageActivity extends AppCompatActivity {
 
@@ -41,9 +39,10 @@ public class DisplayMessageActivity extends AppCompatActivity {
     private int[] data;
     private String ean;
 
+    private static int totalLength = tertiaryFieldNames.length + binaryFieldNames.length;
 
     //get the group ids to clear the radio button ids
-    protected static final int GROUP_OFFSET = MAX_NO_OF_CONDITIONS + Reference.fieldNames.length * MAX_NO_OF_CONDITIONS;
+    protected static final int GROUP_OFFSET = MAX_NO_OF_CONDITIONS + totalLength * MAX_NO_OF_CONDITIONS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,6 @@ public class DisplayMessageActivity extends AppCompatActivity {
       * @param view
      */
     public void submit(View view) {
-        //String json = JSONify.toJSON(data);
         String encodedData = JSONify.encode(data);
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = Reference.BASE_URL + "/" + ean + encodedData;
@@ -113,7 +111,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
         textView.setText(ADD_DATA_TEXT);
 
         //loop through each intolerance we use
-        for (int i = 0; i < Reference.fieldNamesFormatted.length; i++) {
+        for (int i = 0; i < Reference.tertiaryFieldNamesFormatted.length; i++) {
             if (data[i] == Reference.UNKNOWN) {
                 //create a new table row
                 TableRow row = new TableRow(this);
@@ -123,7 +121,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
                 //create a new text view
                 TextView tv = new TextView(this);
-                tv.setText(Reference.fieldNamesFormatted[i]);
+                tv.setText(Reference.tertiaryFieldNamesFormatted[i]);
 
                 //setup the radio buttons
                 RadioGroup group = new RadioGroup(this);
