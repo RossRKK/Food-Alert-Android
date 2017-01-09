@@ -22,6 +22,7 @@ public class JSONify {
             if (subStr.contains("-")) {
                 subStr = json.substring(index, index + 2);
             }
+
             // parse the string to an integer
             data[dataIndex] = Integer.parseInt(subStr);
             dataIndex++;

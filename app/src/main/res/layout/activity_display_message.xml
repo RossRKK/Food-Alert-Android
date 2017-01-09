@@ -18,15 +18,23 @@
         android:text="@string/profile_screen_title"
         android:paddingBottom="20sp"/>
 
-
-    <TableLayout
-        android:id="@+id/table"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></TableLayout>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TableLayout
+            android:id="@+id/table"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableLayout>
 
-    <Button android:id="@+id/push_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_submit"
-        android:onClick="submit"/>
+            <Button android:id="@+id/push_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_submit"
+                android:onClick="submit"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

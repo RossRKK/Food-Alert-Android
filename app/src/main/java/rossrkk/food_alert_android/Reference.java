@@ -7,10 +7,10 @@ import android.graphics.Color;
  */
 
 public class Reference {
-    public static final String[] tertiaryFieldNames = {"containsNuts", "containsDairy"};
+    public static final String[] tertiaryFieldNames = {"containsMilk", "containsEggs", "containsPeanuts", "containsTreeNuts", "containsSoy", "containsWheatGluten", "containsFish", "containsShellFish"};
     public static final String[] binaryFieldNames = {"isVegetarian", "isVegan"};
     //public static final String[] contiuousFieldNames = { "sugar", "fat", "calories" };
-    public static final String[] tertiaryFieldNamesFormatted = {"Nuts", "Dairy"};
+    public static final String[] tertiaryFieldNamesFormatted = {"Milk", "Eggs", "Peanuts", "Tree Nuts", "Soy", "Wheat or Gluten", "Fish", "Shell Fish"};
     public static final String[] binaryFieldNamesFormatted = {"Vegetarian", "Vegan"};
 
     public static final int ANY = 3; //also used to indicate FALSE for isVegetarian etc.
