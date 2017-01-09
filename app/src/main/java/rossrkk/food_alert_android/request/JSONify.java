@@ -24,7 +24,7 @@ public class JSONify {
             }
             // parse the string to an integer
             data[dataIndex] = Integer.parseInt(subStr);
-            dataIndex ++;
+            dataIndex++;
         }
 
         // loop through each field
@@ -62,16 +62,26 @@ public class JSONify {
     public static String encode(int[] data) {
         String out = "?";
 
-        for (int i = 0; i < Reference.tertiaryFieldNames.length && i < data.length; i++) {
-            out += Reference.tertiaryFieldNames[i] + "=" + data[i];
+        int index = 0;
+        for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
+            out += Reference.binaryFieldNames[i] + "=" + data[index];
 
-            if (i != Reference.tertiaryFieldNames.length - 1) {
+            if (index != Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length - 1) {
                 out += "&";
             }
+
+            index++;
         }
 
-        //out += "}";
+        for (int i = 0; i < Reference.tertiaryFieldNames.length && i < data.length; i++) {
+            out += Reference.tertiaryFieldNames[i] + "=" + data[index];
 
+            if (index != Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length - 1) {
+                out += "&";
+            }
+            index++;
+        }
+        System.out.println(out);
         return out;
     }
 
@@ -80,10 +90,18 @@ public class JSONify {
         for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
             out += Reference.tertiaryFieldNamesFormatted[i] + ": ";
             switch (data[i]) {
-                case -1: out += "Unknown"; break;
-                case 0: out += "Yes"; break;
-                case 1: out += "No"; break;
-                default: out += "Error"; break;
+                case -1:
+                    out += "Unknown";
+                    break;
+                case 0:
+                    out += "Yes";
+                    break;
+                case 1:
+                    out += "No";
+                    break;
+                default:
+                    out += "Error";
+                    break;
             }
 
             if (i < Reference.tertiaryFieldNames.length - 1) {

@@ -7,15 +7,15 @@ import android.graphics.Color;
  */
 
 public class Reference {
-    public static final String[] tertiaryFieldNames = { "containsNuts", "containsDairy" };
-    public static final String[] binaryFieldNames = { "containsVegetarian", "containsVegan" };
-    public static final String[] contiuousFieldNames = { "sugar", "fat", "calories" };
-    public static final String[] tertiaryFieldNamesFormatted = { "Nuts", "Dairy" };
-    public static final String[] binaryFieldNamesFormatted = { "Vegetarian" , "Vegan" };
+    public static final String[] tertiaryFieldNames = {"containsNuts", "containsDairy"};
+    public static final String[] binaryFieldNames = {"isVegetarian", "isVegan"};
+    //public static final String[] contiuousFieldNames = { "sugar", "fat", "calories" };
+    public static final String[] tertiaryFieldNamesFormatted = {"Nuts", "Dairy"};
+    public static final String[] binaryFieldNamesFormatted = {"Vegetarian", "Vegan"};
 
-    public static final int ANY = 3;
+    public static final int ANY = 3; //also used to indicate FALSE for isVegetarian etc.
     public static final int TRACE = 2;
-    public static final int NONE = 1;
+    public static final int NONE = 1; //also used to indicate TRUE for isVegetarian etc.
     public static final int UNKNOWN = 0;
 
     public static final int COMPATIBLE = 2;
@@ -25,6 +25,6 @@ public class Reference {
     public static final int GREEN = Color.rgb(77, 250, 144);
     public static final int YELLOW = Color.rgb(250, 190, 77);
 
-    public static final String BASE_URL = "http://food-alert.herokuapp.com";
-    //public static final String BASE_URL = "http://192.168.1.174:8080";
+    //public static final String BASE_URL = "http://food-alert.herokuapp.com";
+    public static final String BASE_URL = "http://192.168.1.174:8080";
 }

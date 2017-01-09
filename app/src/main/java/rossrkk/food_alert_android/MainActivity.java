@@ -2,9 +2,9 @@ package rossrkk.food_alert_android;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -33,12 +33,38 @@ public class MainActivity extends AppCompatActivity {
     public final static String CAN_EAT = "rossrkk.food_alert_android.CAN_EAT";
     public final static String EAN = "rossrkk.food_alert_android.EAN";
 
-    private int[] profile = new int[Reference.tertiaryFieldNames.length];
+    private int[] profile = new int[Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length];
     private int[] data;
 
     private int canEat;
 
     private String ean;
+    /**
+     * Code that handles the barcodde scanner
+     */
+    private DecoratedBarcodeView barcodeView;
+    private BeepManager beepManager;
+    private String lastText;
+    private BarcodeCallback callback = new BarcodeCallback() {
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            if (result.getText() == null || result.getText().equals(lastText)) {
+                // Prevent duplicate scans
+                return;
+            }
+
+            lastText = result.getText();
+            barcodeView.setStatusText(result.getText());
+            beepManager.playBeepSoundAndVibrate();
+
+            ean = lastText;
+            get(ean);
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +79,7 @@ public class MainActivity extends AppCompatActivity {
         beepManager = new BeepManager(this);
     }
 
-
-    public void sendMessage(View view)  {
+    public void sendMessage(View view) {
         EditText editText = (EditText) findViewById(R.id.edit_message);
         ean = editText.getText().toString();
         get(ean);
@@ -76,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void switchToProfile(View view)  {
+    public void switchToProfile(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
@@ -85,14 +110,22 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         //set the default value
         int defaultValue = Reference.UNKNOWN;
-        for (int i = 0; i < profile.length; i++) {
+        int index = 0;
+
+        for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
+            profile[index] = sharedPref.getInt(Reference.binaryFieldNames[i], defaultValue);
+            index++;
+        }
+
+        for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
             //get the saved value of the profile
-            profile[i] = sharedPref.getInt(Reference.tertiaryFieldNames[i], defaultValue);
+            profile[index] = sharedPref.getInt(Reference.tertiaryFieldNames[i], defaultValue);
+            index++;
         }
     }
 
     public void get(String message) {
-         // Instantiate the RequestQueue.
+        // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = Reference.BASE_URL + "/" + message;
 
@@ -106,12 +139,12 @@ public class MainActivity extends AppCompatActivity {
                         setData(JSONify.fromJSON(response));
                     }
                 }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //TODO add an alert here
-                        System.out.println("GET request error");
-                    }
-                });
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //TODO add an alert here
+                System.out.println("GET request error");
+            }
+        });
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
@@ -126,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Figure out whether this food is compatible with this profile
+     *
      * @return 1 if compatible, 0 if not and -1 if unsure
      */
     private int compareToProfile() {
@@ -138,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             //if the data matches the profiles tolerances
+            System.out.println(profile[i] == Reference.NONE);
             if (profile[i] == Reference.NONE && (data[i] == Reference.TRACE || data[i] == Reference.ANY)) {
                 layout.setBackgroundColor(Reference.RED);
                 return Reference.INCOMPATIBLE;
@@ -152,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Find out if the data is complete
+     *
      * @return True if the data is complete else false
      */
     public boolean isComplete() {
@@ -162,34 +198,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
-    /**
-     * Code that handles the barcodde scanner
-     */
-    private DecoratedBarcodeView barcodeView;
-    private BeepManager beepManager;
-    private String lastText;
-
-    private BarcodeCallback callback = new BarcodeCallback() {
-        @Override
-        public void barcodeResult(BarcodeResult result) {
-            if(result.getText() == null || result.getText().equals(lastText)) {
-                // Prevent duplicate scans
-                return;
-            }
-
-            lastText = result.getText();
-            barcodeView.setStatusText(result.getText());
-            beepManager.playBeepSoundAndVibrate();
-
-            ean = lastText;
-            get(ean);
-        }
-
-        @Override
-        public void possibleResultPoints(List<ResultPoint> resultPoints) {
-        }
-    };
 
     @Override
     protected void onResume() {

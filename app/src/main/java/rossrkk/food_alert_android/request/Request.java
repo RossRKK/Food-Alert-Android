@@ -20,14 +20,13 @@ import rossrkk.food_alert_android.Reference;
  */
 
 public class Request extends AsyncTask<String, Void, int[]> {
+    private static final String URL = "food-alert.herokuapp.com";
+    private static final int PORT = 80;
     private String message;
     private String method;
     private MainActivity called;
 
-    private static final String URL = "food-alert.herokuapp.com";
-    private static final int PORT = 80;
-
-    public  Request(String message, String method, MainActivity called) {
+    public Request(String message, String method, MainActivity called) {
         this.message = message;
         this.method = method;
         this.called = called;
@@ -61,7 +60,7 @@ public class Request extends AsyncTask<String, Void, int[]> {
             out[i] = Reference.UNKNOWN;
         }
         if (method.equalsIgnoreCase("GET")) {
-            String urlStr = "http://" + URL + ":" + PORT +  "/" + message;
+            String urlStr = "http://" + URL + ":" + PORT + "/" + message;
             try {
                 URL url = new URL(urlStr);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
