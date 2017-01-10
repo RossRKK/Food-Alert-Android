@@ -7,10 +7,12 @@ package rossrkk.food_alert_android.request;
 public class DataObj {
     private int[] data;
     private String name;
+    private boolean reconfirm;
 
-    public DataObj(int[] data, String name) {
+    public DataObj(int[] data, String name, boolean reconfirm) {
         this.data = data;
         this.name = name;
+        this.reconfirm = reconfirm;
     }
 
     public int[] getData() {
@@ -19,5 +21,9 @@ public class DataObj {
 
     public String getName() {
         return name;
+    }
+
+    public boolean getReconfirm() {
+        return reconfirm;
     }
 }

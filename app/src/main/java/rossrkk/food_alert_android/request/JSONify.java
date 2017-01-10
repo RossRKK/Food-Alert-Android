@@ -43,7 +43,13 @@ public class JSONify {
             data[dataIndex] = Integer.parseInt(valueOfField(Reference.tertiaryFieldNames[i], json));
             dataIndex++;
         }
-        return new DataObj(data, name);
+
+        String reconfirmStr = valueOfField("reconfirm", json);
+        reconfirmStr = reconfirmStr.substring(1, reconfirmStr.length()-1);
+        boolean reconfirm = reconfirmStr.equalsIgnoreCase("true");
+        System.out.println(reconfirmStr);
+
+        return new DataObj(data, name, reconfirm);
     }
 
     private static String valueOfField(String fieldName, String json) {

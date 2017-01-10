@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         Reference.canEat = Reference.compareToProfile();
         ((TextView)findViewById(R.id.name)).setText(Reference.name);
         updateBackground();
-        if (!isComplete()) {
+        if (data.getReconfirm() || !isComplete()) {
             reconfirm();
         }
     }
