@@ -4,16 +4,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import rossrkk.food_alert_android.R;
 import rossrkk.food_alert_android.Reference;
+
+import static rossrkk.food_alert_android.Reference.profile;
 
 public class ProfileActivity extends AppCompatActivity {
     protected static final String ANY = "Any amount ";
@@ -32,22 +39,66 @@ public class ProfileActivity extends AppCompatActivity {
     //get the group ids to clear the radio button ids
     protected static final int GROUP_OFFSET = MAX_NO_OF_CONDITIONS + totalLength * MAX_NO_OF_CONDITIONS;
 
-    protected int[] profile = new int[totalLength];
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
         init();
+        updateBackground();
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_home:
+                                switchToMain();
+                                break;
+                            case R.id.action_profile:
+                                break;
+                            case R.id.action_reconfirm:
+                                switchToReconfirm();
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
+    }
+
+    public void updateBackground() {
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.profile_layout);
+        switch (Reference.canEat) {
+            case Reference.COMPATIBLE:
+                layout.setBackgroundColor(Reference.GREEN);
+                break;
+            case Reference.INCOMPATIBLE:
+                layout.setBackgroundColor(Reference.RED);
+                break;
+            case Reference.UNKNOWN:
+                layout.setBackgroundColor(Reference.YELLOW);
+                break;
+        }
+    }
+
+    public void switchToReconfirm() {
+        Intent intent = new Intent(this, rossrkk.food_alert_android.DisplayMessageActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+    }
+
+    public void switchToMain() {
+        Intent intent = new Intent(this, rossrkk.food_alert_android.MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
     }
 
     /**
      * The action that is taken when the submit button is pressed
-     *
-     * @param view The view object the submit button is in
      */
-    public void submit(View view) {
+    public void submit() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -65,10 +116,8 @@ public class ProfileActivity extends AppCompatActivity {
             editor.commit();
             index++;
         }
-
-        //change back to the main screen
-        Intent intent = new Intent(this, rossrkk.food_alert_android.MainActivity.class);
-        startActivity(intent);
+        Reference.canEat = Reference.compareToProfile();
+        updateBackground();
     }
 
     /**
@@ -149,6 +198,7 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                     //set this in the profile array
                     profile[row] = amount;
+                    submit();
                 }
             });
             index++;
@@ -229,6 +279,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     //set this in the profile array
                     profile[row] = amount;
+                    submit();
                 }
             });
             index++;

@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -31,18 +34,7 @@ import rossrkk.food_alert_android.request.JSONify;
 
 
 public class MainActivity extends AppCompatActivity {
-    public final static String DATA = "rossrkk.food_alert_android.DATA";
-    public final static String CAN_EAT = "rossrkk.food_alert_android.CAN_EAT";
-    public final static String EAN = "rossrkk.food_alert_android.EAN";
-    public final static String NAME = "rossrkk.food_alert_android.NAME";
 
-    private int[] profile = new int[Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length];
-    private int[] data;
-
-    private int canEat;
-    private String name;
-
-    private String ean;
     /**
      * Code that handles the barcodde scanner
      */
@@ -61,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
             barcodeView.setStatusText(result.getText());
             beepManager.playBeepSoundAndVibrate();
 
-            ean = lastText;
-            get(ean);
+            Reference.ean = lastText;
+            get(Reference.ean);
         }
 
         @Override
@@ -81,34 +73,59 @@ public class MainActivity extends AppCompatActivity {
         barcodeView.decodeContinuous(callback);
 
         beepManager = new BeepManager(this);
+
+        ((TextView)findViewById(R.id.name)).setText(Reference.name);
+        updateBackground();
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_profile:
+                                switchToProfile();
+                                break;
+                            case R.id.action_reconfirm:
+                                reconfirm();
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
+    }
+
+    private void updateBackground() {
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.main_layout);
+        switch (Reference.canEat) {
+            case Reference.COMPATIBLE:
+                layout.setBackgroundColor(Reference.GREEN);
+                break;
+            case Reference.INCOMPATIBLE:
+                layout.setBackgroundColor(Reference.RED);
+                break;
+            case Reference.UNKNOWN:
+                layout.setBackgroundColor(Reference.YELLOW);
+                break;
+        }
     }
 
     public void sendMessage(View view) {
         EditText editText = (EditText) findViewById(R.id.edit_message);
-        ean = editText.getText().toString();
-        get(ean);
+        Reference.ean = editText.getText().toString();
+        get(Reference.ean);
     }
 
-    public void unknown(int canEat, String name) {
-        Intent intent = new Intent(this, rossrkk.food_alert_android.DisplayMessageActivity.class);
-        intent.putExtra(EAN, ean);
-        intent.putExtra(CAN_EAT, canEat);
-        intent.putExtra(DATA, data);
-        intent.putExtra(NAME, name);
+    public void reconfirm() {
+        Intent intent = new Intent(this, rossrkk.food_alert_android.DisplayMessageActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
-    public void reconfirm(View view) {
-        Intent intent = new Intent(this, rossrkk.food_alert_android.DisplayMessageActivity.class);
-        intent.putExtra(EAN, ean);
-        intent.putExtra(CAN_EAT, canEat);
-        intent.putExtra(DATA, data);
-        intent.putExtra(NAME, name);
-        startActivity(intent);
-    }
-
-    public void switchToProfile(View view) {
-        Intent intent = new Intent(this, ProfileActivity.class);
+    public void switchToProfile() {
+        Intent intent = new Intent(this, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
@@ -119,13 +136,13 @@ public class MainActivity extends AppCompatActivity {
         int index = 0;
 
         for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
-            profile[index] = sharedPref.getInt(Reference.binaryFieldNames[i], defaultValue);
+            Reference.profile[index] = sharedPref.getInt(Reference.binaryFieldNames[i], defaultValue);
             index++;
         }
 
         for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
             //get the saved value of the profile
-            profile[index] = sharedPref.getInt(Reference.tertiaryFieldNames[i], defaultValue);
+            Reference.profile[index] = sharedPref.getInt(Reference.tertiaryFieldNames[i], defaultValue);
             index++;
         }
     }
@@ -156,41 +173,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setData(DataObj data) {
-        this.data = data.getData();
-        this.name = data.getName();
-        canEat = compareToProfile();
-        ((TextView)findViewById(R.id.name)).setText(name);
+        Reference.data = data.getData();
+        Reference.name = data.getName();
+        Reference.canEat = Reference.compareToProfile();
+        ((TextView)findViewById(R.id.name)).setText(Reference.name);
+        updateBackground();
         if (!isComplete()) {
-            unknown(canEat, name);
+            reconfirm();
         }
-    }
-
-    /**
-     * Figure out whether this food is compatible with this profile
-     *
-     * @return 1 if compatible, 0 if not and -1 if unsure
-     */
-    private int compareToProfile() {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.linear_layout);
-        for (int i = 0; i < profile.length; i++) {
-            //if the person is intolerant and the data is unknown return unknown
-            if ((profile[i] == Reference.NONE || profile[i] == Reference.TRACE) && data[i] == Reference.UNKNOWN) {
-                layout.setBackgroundColor(Reference.YELLOW);
-                return Reference.UNKNOWN;
-            }
-
-            //if the data matches the profiles tolerances
-            System.out.println(profile[i] == Reference.NONE);
-            if (profile[i] == Reference.NONE && (data[i] == Reference.TRACE || data[i] == Reference.ANY)) {
-                layout.setBackgroundColor(Reference.RED);
-                return Reference.INCOMPATIBLE;
-            } else if (profile[i] == Reference.TRACE && data[i] == Reference.ANY) {
-                layout.setBackgroundColor(Reference.RED);
-                return Reference.INCOMPATIBLE;
-            }
-        }
-        layout.setBackgroundColor(Reference.GREEN);
-        return Reference.COMPATIBLE;
     }
 
     /**
@@ -199,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
      * @return True if the data is complete else false
      */
     public boolean isComplete() {
-        for (int i = 0; i < data.length; i++) {
-            if (data[i] == Reference.UNKNOWN) {
+        for (int i = 0; i < Reference.data.length; i++) {
+            if (Reference.data[i] == Reference.UNKNOWN) {
                 return false;
             }
         }

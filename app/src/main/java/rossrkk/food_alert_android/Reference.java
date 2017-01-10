@@ -1,5 +1,7 @@
 package rossrkk.food_alert_android;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 
 /**
@@ -25,6 +27,35 @@ public class Reference {
     public static final int GREEN = Color.rgb(77, 250, 144);
     public static final int YELLOW = Color.rgb(250, 190, 77);
 
-    //public static final String BASE_URL = "http://food-alert.herokuapp.com";
-    public static final String BASE_URL = "http://192.168.1.174:8080";
+    public static final String BASE_URL = "http://food-alert.herokuapp.com";
+
+    public static int[] profile = new int[tertiaryFieldNames.length + binaryFieldNames.length];
+    public static int canEat = -1;
+    public static String ean;
+    public static String name;
+    public static int[] data;
+
+    /**
+     * Figure out whether this food is compatible with this profile
+     *
+     * @return 1 if compatible, 0 if not and -1 if unsure
+     */
+    public static int compareToProfile() {
+        for (int i = 0; i < profile.length; i++) {
+            //if the person is intolerant and the data is unknown return unknown
+            if ((profile[i] == NONE || profile[i] == TRACE) && data[i] == UNKNOWN) {
+                return UNKNOWN;
+            }
+
+            //if the data matches the profiles tolerances
+            System.out.println(profile[i] == NONE);
+            if (profile[i] == NONE && (data[i] == TRACE || data[i] == ANY)) {
+                return INCOMPATIBLE;
+            } else if (profile[i] == TRACE && data[i] == ANY) {
+                return INCOMPATIBLE;
+            }
+        }
+        return COMPATIBLE;
+    }
+    //public static final String BASE_URL = "http://192.168.1.174:8080";
 }
