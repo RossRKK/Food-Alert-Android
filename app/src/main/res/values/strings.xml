@@ -5,8 +5,8 @@
     <string name="button_send">Send</string>
     <string name="button_profile">Profile</string>
     <string name="title_activity_profile">ProfileActivity</string>
-    <string name="profile_screen_title">I can eat: </string>
-    <string name="reconfrim_title">Tell us about this food</string>
+    <string name="profile_screen_title">I am/can eat: </string>
+    <string name="reconfrim_title">This food is/contains: </string>
     <string name="button_submit">Submit</string>
     <string name="profile_file_key">rossrkk.food_alert_android.PROFILE_FILE_KEY</string>
     <string name="scan">Scan</string>

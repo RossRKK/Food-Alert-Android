@@ -1,5 +1,6 @@
 package rossrkk.food_alert_android;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -114,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendMessage(View view) {
+        View v = this.getCurrentFocus();
+        if (v != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
         EditText editText = (EditText) findViewById(R.id.edit_message);
         Reference.ean = editText.getText().toString();
         get(Reference.ean);

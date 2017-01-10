@@ -38,8 +38,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
     protected static final String NEGATIVE = "No ";
     protected static final String POSITIVE = "Yes ";
     protected static final int MAX_NO_OF_CONDITIONS = 100;
-    protected static final int OPTIONS = 3;
-    private static final String ADD_DATA_TEXT = "Please tell us what this food contains: ";
+
     private static int totalLength = tertiaryFieldNames.length + binaryFieldNames.length;
     //get the group ids to clear the radio button ids
     protected static final int GROUP_OFFSET = MAX_NO_OF_CONDITIONS + totalLength * MAX_NO_OF_CONDITIONS;
@@ -130,6 +129,12 @@ public class DisplayMessageActivity extends AppCompatActivity {
         });
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+
+        Reference.ean = null;
+        Reference.name = null;
+        Reference.canEat = -1;
+        Reference.data = null;
+        switchToHome();
     }
 
     /**
@@ -190,14 +195,14 @@ public class DisplayMessageActivity extends AppCompatActivity {
                         //figure out the row the radio button was in
                         int row = group.getId() - GROUP_OFFSET;
                         //figure out the amount this represents
-                        int in = checkedId % 2;
+                        String text = ((RadioButton)findViewById(checkedId)).getText().toString();
                         int amount = Reference.UNKNOWN;
                         //re-map the values because currently 2 is traces and 1 is any amount
-                        switch (in) {
-                            case 1:
+                        switch (text) {
+                            case POSITIVE:
                                 amount = Reference.NONE;
                                 break;
-                            case 0:
+                            case NEGATIVE:
                                 amount = Reference.ANY;
                                 break;
                         }
@@ -260,19 +265,18 @@ public class DisplayMessageActivity extends AppCompatActivity {
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         //figure out the row the radio button was in
                         int row = group.getId() - GROUP_OFFSET;
-
+                        String text = ((RadioButton)findViewById(checkedId)).getText().toString();
                         //figure out the amount this represents
-                        int in = (checkedId - (Reference.binaryFieldNames.length * 2)) % OPTIONS;
                         int amount = Reference.UNKNOWN;
                         //re-map the values because currently 2 is traces and 1 is any amount
-                        switch (in) {
-                            case 1:
+                        switch (text) {
+                            case ANY:
                                 amount = Reference.ANY;
                                 break;
-                            case 2:
+                            case TRACES:
                                 amount = Reference.TRACE;
                                 break;
-                            case 0:
+                            case NONE:
                                 amount = Reference.NONE;
                                 break;
                         }

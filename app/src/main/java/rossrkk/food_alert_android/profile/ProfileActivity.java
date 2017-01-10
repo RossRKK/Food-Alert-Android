@@ -184,15 +184,14 @@ public class ProfileActivity extends AppCompatActivity {
                     //figure out the row the radio button was in
                     int row = group.getId() - GROUP_OFFSET;
                     //figure out the amount this represents
-                    int in = checkedId % 2;
+                    String text = ((RadioButton)findViewById(checkedId)).getText().toString();
                     int amount = Reference.UNKNOWN;
-
-                    //1 is yes 0 is no
-                    switch (in) {
-                        case 1:
+                    //re-map the values because currently 2 is traces and 1 is any amount
+                    switch (text) {
+                        case POSITIVE:
                             amount = Reference.NONE;
                             break;
-                        case 0:
+                        case NEGATIVE:
                             amount = Reference.ANY;
                             break;
                     }
@@ -260,18 +259,18 @@ public class ProfileActivity extends AppCompatActivity {
                     //figure out the row the radio button was in
                     int row = group.getId() - GROUP_OFFSET;
 
+                    String text = ((RadioButton)findViewById(checkedId)).getText().toString();
                     //figure out the amount this represents
-                    int in = (checkedId - (Reference.binaryFieldNames.length * 2)) % OPTIONS;
                     int amount = Reference.UNKNOWN;
                     //re-map the values because currently 2 is traces and 1 is any amount
-                    switch (in) {
-                        case 1:
+                    switch (text) {
+                        case ANY:
                             amount = Reference.ANY;
                             break;
-                        case 2:
+                        case TRACES:
                             amount = Reference.TRACE;
                             break;
-                        case 0:
+                        case NONE:
                             amount = Reference.NONE;
                             break;
                     }

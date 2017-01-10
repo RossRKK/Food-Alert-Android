@@ -41,21 +41,25 @@ public class Reference {
      * @return 1 if compatible, 0 if not and -1 if unsure
      */
     public static int compareToProfile() {
-        for (int i = 0; i < profile.length; i++) {
-            //if the person is intolerant and the data is unknown return unknown
-            if ((profile[i] == NONE || profile[i] == TRACE) && data[i] == UNKNOWN) {
-                return UNKNOWN;
-            }
+        if (data != null) {
+            for (int i = 0; i < profile.length; i++) {
+                //if the person is intolerant and the data is unknown return unknown
+                if ((profile[i] == NONE || profile[i] == TRACE) && data[i] == UNKNOWN) {
+                    return UNKNOWN;
+                }
 
-            //if the data matches the profiles tolerances
-            System.out.println(profile[i] == NONE);
-            if (profile[i] == NONE && (data[i] == TRACE || data[i] == ANY)) {
-                return INCOMPATIBLE;
-            } else if (profile[i] == TRACE && data[i] == ANY) {
-                return INCOMPATIBLE;
+                //if the data matches the profiles tolerances
+                System.out.println(profile[i] == NONE);
+                if (profile[i] == NONE && (data[i] == TRACE || data[i] == ANY)) {
+                    return INCOMPATIBLE;
+                } else if (profile[i] == TRACE && data[i] == ANY) {
+                    return INCOMPATIBLE;
+                }
             }
+            return COMPATIBLE;
+        } else {
+            return -1;
         }
-        return COMPATIBLE;
     }
     //public static final String BASE_URL = "http://192.168.1.174:8080";
 }
