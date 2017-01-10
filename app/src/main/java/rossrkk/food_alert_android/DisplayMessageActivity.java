@@ -23,6 +23,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import rossrkk.food_alert_android.profile.ProfileActivity;
 import rossrkk.food_alert_android.request.JSONify;
 
@@ -108,7 +111,12 @@ public class DisplayMessageActivity extends AppCompatActivity {
      */
     public void submit(View view) {
         EditText nameBox = (EditText)findViewById(R.id.name);
-        String name = nameBox.getText().toString();
+        String name = "null";
+        try {
+            name = URLEncoder.encode(nameBox.getText().toString(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Error Encoding Name");
+        }
         String encodedData = JSONify.encode(name, data);
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = Reference.BASE_URL + "/" + Reference.ean + encodedData;
@@ -118,7 +126,6 @@ public class DisplayMessageActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println(response);
                     }
                 }, new Response.ErrorListener() {
             @Override

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,6 +30,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rossrkk.food_alert_android.profile.ProfileActivity;
 import rossrkk.food_alert_android.request.DataObj;
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ping(); //ping the server in case it needs to wake up
         loadProfile();
 
         //for barcode scanning
@@ -154,6 +157,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void setName(String name) {
+        ((TextView)findViewById(R.id.name)).setText(name);
+    }
+
+    public void ping() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = Reference.BASE_URL;
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        setName("Ready");
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                setName("Error Communicating with Server");
+            }
+        });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                (int) TimeUnit.SECONDS.toMillis(30),
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
     public void get(String message) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -164,14 +197,13 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println(response);
                         // Display the first 500 characters of the response string.
                         setData(JSONify.fromJSON(response));
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //TODO add an alert here
+                setName("Error Communicating with Server");
                 System.out.println("GET request error");
             }
         });

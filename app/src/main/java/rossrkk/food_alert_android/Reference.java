@@ -49,7 +49,6 @@ public class Reference {
                 }
 
                 //if the data matches the profiles tolerances
-                System.out.println(profile[i] == NONE);
                 if (profile[i] == NONE && (data[i] == TRACE || data[i] == ANY)) {
                     return INCOMPATIBLE;
                 } else if (profile[i] == TRACE && data[i] == ANY) {

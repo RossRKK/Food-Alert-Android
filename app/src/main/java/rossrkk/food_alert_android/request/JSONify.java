@@ -1,5 +1,9 @@
 package rossrkk.food_alert_android.request;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import rossrkk.food_alert_android.MainActivity;
 import rossrkk.food_alert_android.Reference;
 
@@ -14,7 +18,11 @@ public class JSONify {
         String nameField = "name";
 
         String name = valueOfField(nameField, json);
-        name = name.substring(1, name.length()-1);
+        try {
+            name = URLDecoder.decode(name.substring(1, name.length() - 1), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Error decoding name");
+        }
 
         // declare an integer array with an element for each field
         int[] data = new int[Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length];
@@ -65,7 +73,6 @@ public class JSONify {
             out += Reference.tertiaryFieldNames[i] + "=" + data[index];
             index++;
         }
-        System.out.println(out);
         return out;
     }
 }
