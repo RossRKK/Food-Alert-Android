@@ -17,6 +17,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import rossrkk.food_alert_android.R;
 import rossrkk.food_alert_android.Reference;
 
@@ -43,6 +46,10 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("C1A7B53B5BDF37B0263E126071DF1D81").build();
+        mAdView.loadAd(adRequest);
 
         init();
         updateBackground();
@@ -71,7 +78,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void updateBackground() {
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.profile_layout);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.profile_layout);
         Reference.updateBackground(layout);
     }
 

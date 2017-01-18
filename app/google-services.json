@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "469135148418",
+    "firebase_url": "https://food-alert.firebaseio.com",
+    "project_id": "food-alert",
+    "storage_bucket": "food-alert.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469135148418:android:ffce4bef7850f196",
+        "android_client_info": {
+          "package_name": "rossrkk.food_alert_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "469135148418-4m4rothq8eboi9no0uk50ng07q8lgheq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEFA-WVY8DnKNURFpv4Lq_gtDHa_RIDMo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

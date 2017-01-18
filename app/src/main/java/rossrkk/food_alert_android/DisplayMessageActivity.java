@@ -22,6 +22,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -53,6 +55,10 @@ public class DisplayMessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_message);
 
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("C1A7B53B5BDF37B0263E126071DF1D81").build();
+        mAdView.loadAd(adRequest);
+
         Intent intent = getIntent();
         boolean auto = intent.getBooleanExtra(MainActivity.AUTO_NAME, false);
         if (auto) {
@@ -60,7 +66,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
             title.setText(R.string.auto_title);
         }
 
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.display_layout);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.display_layout);
         updateBackground(layout);
 
         textView = (TextView) findViewById(R.id.title);

@@ -8,11 +8,13 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +25,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -73,6 +78,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ping(); //ping the server in case it needs to wake up
+
+        //setup the ad
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-5158131601481362/3995936333");
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("C1A7B53B5BDF37B0263E126071DF1D81").build();
+        mAdView.loadAd(adRequest);
+
         loadProfile();
 
         //for barcode scanning
@@ -83,14 +96,13 @@ public class MainActivity extends AppCompatActivity {
         lastText = null;
         Reference.canEat = -1;
         Reference.reconfirm = false;
-        Reference.ean = "";
+        Reference.ean = null;
         Reference.data = null;
         updateBackground();
 
         beepManager = new BeepManager(this);
 
         ((TextView)findViewById(R.id.name)).setText(Reference.name);
-        updateBackground();
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.bottom_navigation);
@@ -114,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateBackground() {
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.main_layout);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.main_layout);
         Reference.updateBackground(layout);
     }
 

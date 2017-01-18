@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.Layout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /**
@@ -68,7 +69,7 @@ public class Reference {
         }
     }
 
-    public static void updateBackground(RelativeLayout layout) {
+    public static void updateBackground(LinearLayout layout) {
         switch (Reference.canEat) {
             case Reference.COMPATIBLE:
                 layout.setBackgroundColor(Reference.GREEN);
