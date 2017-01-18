@@ -32,6 +32,7 @@ import rossrkk.food_alert_android.request.JSONify;
 import static rossrkk.food_alert_android.Reference.binaryFieldNames;
 import static rossrkk.food_alert_android.Reference.data;
 import static rossrkk.food_alert_android.Reference.tertiaryFieldNames;
+import static rossrkk.food_alert_android.Reference.updateBackground;
 
 public class DisplayMessageActivity extends AppCompatActivity {
 
@@ -52,18 +53,15 @@ public class DisplayMessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_message);
 
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.display_layout);
-        switch (Reference.canEat) {
-            case Reference.COMPATIBLE:
-                layout.setBackgroundColor(Reference.GREEN);
-                break;
-            case Reference.INCOMPATIBLE:
-                layout.setBackgroundColor(Reference.RED);
-                break;
-            case Reference.UNKNOWN:
-                layout.setBackgroundColor(Reference.YELLOW);
-                break;
+        Intent intent = getIntent();
+        boolean auto = intent.getBooleanExtra(MainActivity.AUTO_NAME, false);
+        if (auto) {
+            TextView title = (TextView)findViewById(R.id.title);
+            title.setText(R.string.auto_title);
         }
+
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.display_layout);
+        updateBackground(layout);
 
         textView = (TextView) findViewById(R.id.title);
         textView.setTextSize(20f);
@@ -296,7 +294,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
                 index++;
             }
         } else {
-            ((TextView)findViewById(R.id.title)).setText("No Barcode Number");
+            ((TextView)findViewById(R.id.title)).setText("Scan a barcode to edit a products data");
             findViewById(R.id.push_button).setVisibility(View.INVISIBLE);
             findViewById(R.id.name).setVisibility(View.INVISIBLE);
         }

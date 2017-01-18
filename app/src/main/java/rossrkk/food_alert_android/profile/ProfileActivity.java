@@ -72,17 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void updateBackground() {
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.profile_layout);
-        switch (Reference.canEat) {
-            case Reference.COMPATIBLE:
-                layout.setBackgroundColor(Reference.GREEN);
-                break;
-            case Reference.INCOMPATIBLE:
-                layout.setBackgroundColor(Reference.RED);
-                break;
-            case Reference.UNKNOWN:
-                layout.setBackgroundColor(Reference.YELLOW);
-                break;
-        }
+        Reference.updateBackground(layout);
     }
 
     public void switchToReconfirm() {

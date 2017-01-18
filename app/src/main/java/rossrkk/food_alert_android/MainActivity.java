@@ -29,6 +29,7 @@ import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
+import java.sql.Ref;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +39,7 @@ import rossrkk.food_alert_android.request.JSONify;
 
 
 public class MainActivity extends AppCompatActivity {
+    public static String AUTO_NAME = "rossrkk.food-alert.AUTO";
 
     /**
      * Code that handles the barcodde scanner
@@ -77,6 +79,14 @@ public class MainActivity extends AppCompatActivity {
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
 
+        //the scanned data
+        lastText = null;
+        Reference.canEat = -1;
+        Reference.reconfirm = false;
+        Reference.ean = "";
+        Reference.data = null;
+        updateBackground();
+
         beepManager = new BeepManager(this);
 
         ((TextView)findViewById(R.id.name)).setText(Reference.name);
@@ -94,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                                 switchToProfile();
                                 break;
                             case R.id.action_reconfirm:
-                                reconfirm();
+                                reconfirm(false);
                                 break;
 
                         }
@@ -105,17 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateBackground() {
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.main_layout);
-        switch (Reference.canEat) {
-            case Reference.COMPATIBLE:
-                layout.setBackgroundColor(Reference.GREEN);
-                break;
-            case Reference.INCOMPATIBLE:
-                layout.setBackgroundColor(Reference.RED);
-                break;
-            case Reference.UNKNOWN:
-                layout.setBackgroundColor(Reference.YELLOW);
-                break;
-        }
+        Reference.updateBackground(layout);
     }
 
     public void sendMessage(View view) {
@@ -129,8 +129,9 @@ public class MainActivity extends AppCompatActivity {
         get(Reference.ean);
     }
 
-    public void reconfirm() {
+    public void reconfirm(boolean automatic) {
         Intent intent = new Intent(this, rossrkk.food_alert_android.DisplayMessageActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.putExtra(AUTO_NAME, automatic);
         startActivity(intent);
     }
 
@@ -214,11 +215,12 @@ public class MainActivity extends AppCompatActivity {
     public void setData(DataObj data) {
         Reference.data = data.getData();
         Reference.name = data.getName();
+        Reference.reconfirm = data.getReconfirm();
         Reference.canEat = Reference.compareToProfile();
         ((TextView)findViewById(R.id.name)).setText(Reference.name);
         updateBackground();
         if (data.getReconfirm() || !isComplete()) {
-            reconfirm();
+            reconfirm(true);
         }
     }
 
