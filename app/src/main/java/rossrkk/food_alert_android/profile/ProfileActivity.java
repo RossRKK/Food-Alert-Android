@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import rossrkk.food_alert_android.AboutActivity;
 import rossrkk.food_alert_android.R;
 import rossrkk.food_alert_android.Reference;
 
@@ -46,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("C1A7B53B5BDF37B0263E126071DF1D81").build();
@@ -56,6 +58,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.bottom_navigation);
+
+        View view = bottomNavigationView.findViewById(R.id.action_profile);
+        view.performClick();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,11 +75,19 @@ public class ProfileActivity extends AppCompatActivity {
                             case R.id.action_reconfirm:
                                 switchToReconfirm();
                                 break;
+                            case R.id.action_about:
+                                about();
+                                break;
 
                         }
-                        return true;
+                        return false;
                     }
                 });
+    }
+
+    public void about() {
+        Intent intent = new Intent(this, AboutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
     }
 
     public void updateBackground() {
@@ -101,6 +114,7 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         //submit the fields to the thing
         int index = 0;
+
 
         for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
             editor.putInt(Reference.binaryFieldNames[i], profile[index]);

@@ -54,6 +54,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_message);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("C1A7B53B5BDF37B0263E126071DF1D81").build();
@@ -78,6 +79,10 @@ public class DisplayMessageActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.bottom_navigation);
 
+        View view = bottomNavigationView.findViewById(R.id.action_reconfirm);
+        view.performClick();
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -91,11 +96,19 @@ public class DisplayMessageActivity extends AppCompatActivity {
                                 break;
                             case R.id.action_reconfirm:
                                 break;
+                            case R.id.action_about:
+                                about();
+                                break;
 
                         }
-                        return true;
+                        return false;
                     }
                 });
+    }
+
+    public void about() {
+        Intent intent = new Intent(this, AboutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
     }
 
     public void switchToProfile() {

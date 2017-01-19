@@ -6,7 +6,7 @@
     <string name="button_profile">Profile</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="profile_screen_title">I am/can eat: </string>
-    <string name="reconfrim_title">This food is/contains: </string>
+    <string name="reconfirm_title">This food is/contains: </string>
     <string name="button_submit">Submit</string>
     <string name="profile_file_key">rossrkk.food_alert_android.PROFILE_FILE_KEY</string>
     <string name="scan">Scan</string>
@@ -17,5 +17,8 @@
     <string name="please_wait">Please Wait...</string>
     <string name="auto_title">Please confirm the details of this product:</string>
     <string name="banner_ad_unit_id">ca-app-pub-5158131601481362/3995936333</string>
-    <string name="disclaimer">Food Alert is intended as a guide only, always read the label</string>
+    <string name="disclaimer">Food Alert\'s data is added and verified by users. If you are concerned about allergens in a food product the most accurate and up to date information can be found on the label.\nBy using this app you agree that Food Alert is not liable for any accident or injury caused by the consumption of any food product.</string>
+    <string name="title_activity_about">About</string>
+    <string name="menu_about">About</string>
+    <string name="data_policy">All personal data about the user is stored locally on this phone, excluding data used by Google for advertising. You can read Google\'s privacy policy for partnered ads <a href="http://www.google.com/policies/privacy/partners/">here</a>.</string>
 </resources>

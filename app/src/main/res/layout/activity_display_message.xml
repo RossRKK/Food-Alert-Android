@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-                android:text="@string/reconfrim_title"
+                android:text="@string/reconfirm_title"
                 android:paddingBottom="20sp"/>
             <EditText
                 android:id="@+id/name"

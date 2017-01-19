@@ -10,6 +10,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ping(); //ping the server in case it needs to wake up
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
         //setup the ad
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-5158131601481362/3995936333");
@@ -107,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.bottom_navigation);
 
+        View view = bottomNavigationView.findViewById(R.id.action_home);
+        view.performClick();
+
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -118,9 +123,12 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.action_reconfirm:
                                 reconfirm(false);
                                 break;
+                            case R.id.action_about:
+                                about();
+                                break;
 
                         }
-                        return true;
+                        return false;
                     }
                 });
     }
@@ -149,6 +157,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchToProfile() {
         Intent intent = new Intent(this, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+    }
+
+    public void about() {
+        Intent intent = new Intent(this, AboutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
