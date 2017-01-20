@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activity.Main"
+            android:name=".activity.Main"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,16 +25,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.Reconfirm"
+            android:name=".activity.Reconfirm"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Activity.EditProfile"
+            android:name=".activity.EditProfile"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Activity.About"
+            android:name=".activity.About"
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Activity.ChooseProfile"></activity>
+        <activity android:name=".activity.ChooseProfile"></activity>
     </application>
 
 </manifest>

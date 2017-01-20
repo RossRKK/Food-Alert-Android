@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/choose_profile"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    tools:context="rossrkk.food_alert_android.Activity.ChooseProfile">
+    tools:context="rossrkk.food_alert_android.activity.ChooseProfile">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
         <LinearLayout
-            android:id="@+id/choose_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -36,23 +37,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
-        <android.support.design.widget.FloatingActionButton
+        <Button android:id="@+id/push_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            ads:fabSize="normal"
-            ads:srcCompat="@color/colorAccent"
-            android:foregroundGravity="bottom"
-            android:id="@+id/floatingActionButton"
-            android:src="@drawable/ic_add_black_24dp"
-            app:itemBackground="@color/colorPrimary"
-            app:itemIconTint="@color/white"
-            app:itemTextColor="@color/white"
-            android:onClick="addProfile"
-            android:textAlignment="viewEnd"
-            android:layout_gravity="end"
-            android:layout_margin="5dp"
-            android:layout_weight="1" />
+            android:text="@string/button_add"
+            android:onClick="addProfile"/>
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"
@@ -70,4 +59,4 @@
             app:menu="@menu/bottom_navigation_main" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

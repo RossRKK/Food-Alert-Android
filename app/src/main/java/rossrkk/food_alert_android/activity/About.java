@@ -1,4 +1,4 @@
-package rossrkk.food_alert_android.Activity;
+package rossrkk.food_alert_android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

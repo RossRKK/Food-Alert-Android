@@ -115,6 +115,14 @@ public class ProfileManager {
         profiles.add(p);
     }
 
+
+    public static void deleteProfile(Profile p) {
+        profiles.remove(p);
+    }
+    /**
+     * Get the length of the profiles arraylist
+     * @return profiles.size()
+     */
     public static int getLength() {
         return profiles.size();
     }

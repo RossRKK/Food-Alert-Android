@@ -22,4 +22,5 @@
     <string name="menu_about">About</string>
     <string name="data_policy">All personal data about the user is stored locally on this phone, excluding data used by Google for advertising. You can read Google\'s privacy policy for partnered ads <a href="http://www.google.com/policies/privacy/partners/">here</a>.</string>
     <string name="choose_profile_title">Select a profile to edit:</string>
+    <string name="button_add">Add a new Profile</string>
 </resources>

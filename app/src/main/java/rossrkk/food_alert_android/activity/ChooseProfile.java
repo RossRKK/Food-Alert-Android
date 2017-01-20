@@ -1,8 +1,8 @@
-package rossrkk.food_alert_android.Activity;
+package rossrkk.food_alert_android.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -92,6 +89,11 @@ public class ChooseProfile extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void reload() {
+        Intent intent = new Intent(this, ChooseProfile.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+    }
+
     public void switchToEdit(int id) {
         Intent intent = new Intent(this, EditProfile.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(ID_EXTRA, id);
@@ -125,20 +127,36 @@ public class ChooseProfile extends AppCompatActivity {
             //create a new text view
             TextView tv = new TextView(this);
             tv.setText(ProfileManager.getProfile(i).getName());
+            tv.setTextSize(20f);
 
             //Create the edit button
-            Button clickButton = new Button(this);
-            clickButton.setText("Edit");
-            clickButton.setId(i);
-            clickButton.setOnClickListener( new View.OnClickListener() {
+            Button editButton = new Button(this);
+            editButton.setText("Edit");
+            editButton.setId(i);
+            editButton.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     switchToEdit(v.getId());
                 }
             });
 
+            //Create the edit button
+            Button deleteButton = new Button(this);
+            deleteButton.setText("Delete");
+            deleteButton.setId(i);
+            deleteButton.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ProfileManager.deleteProfile(ProfileManager.getProfile(v.getId()));
+                    ProfileManager.saveProfiles(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
+
+                    reload();
+                }
+            });
+
             row.addView(tv);
-            row.addView(clickButton);
+            row.addView(editButton);
+            row.addView(deleteButton);
 
             ll.addView(row);
          }
