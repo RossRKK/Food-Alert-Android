@@ -31,6 +31,7 @@ public class Reference {
     public static final int RED = Color.rgb(247, 117, 177);
 
     public static final String BASE_URL = "http://food-alert.herokuapp.com";
+    public static final String NAME_FIELD = "name";
 
     public static int[] profile = new int[tertiaryFieldNames.length + binaryFieldNames.length];
     public static int canEat = -1;
@@ -38,36 +39,6 @@ public class Reference {
     public static String name;
     public static int[] data;
     public static boolean reconfirm = false;
-
-    /**
-     * Figure out whether this food is compatible with this profile
-     *
-     * @return 1 if compatible, 0 if not and -1 if unsure
-     */
-    public static int compareToProfile() {
-        if (data != null && !reconfirm) {
-            for (int i = 0; i < profile.length; i++) {
-                //if the person is intolerant and the data is unknown return unknown
-                if ((profile[i] == NONE || profile[i] == TRACE) && data[i] == UNKNOWN) {
-                    return UNKNOWN;
-                }
-
-                //if the data matches the profiles tolerances
-                if (profile[i] == NONE && (data[i] == TRACE || data[i] == ANY)) {
-                    return INCOMPATIBLE;
-                } else if (profile[i] == TRACE && data[i] == ANY) {
-                    return INCOMPATIBLE;
-                }
-            }
-            return COMPATIBLE;
-        } else {
-            if (reconfirm) {
-                return UNKNOWN;
-            } else {
-                return -1;
-            }
-        }
-    }
 
     public static void updateBackground(LinearLayout layout) {
         switch (Reference.canEat) {

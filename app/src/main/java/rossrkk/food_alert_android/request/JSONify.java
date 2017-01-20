@@ -2,9 +2,7 @@ package rossrkk.food_alert_android.request;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 
-import rossrkk.food_alert_android.MainActivity;
 import rossrkk.food_alert_android.Reference;
 
 /**

@@ -1,4 +1,4 @@
-package rossrkk.food_alert_android.profile;
+package rossrkk.food_alert_android.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,21 +12,18 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-
-import rossrkk.food_alert_android.AboutActivity;
 import rossrkk.food_alert_android.R;
 import rossrkk.food_alert_android.Reference;
+import rossrkk.food_alert_android.profile.Profile;
+import rossrkk.food_alert_android.profile.ProfileManager;
 
-import static rossrkk.food_alert_android.Reference.profile;
-
-public class ProfileActivity extends AppCompatActivity {
+public class EditProfile extends AppCompatActivity {
     protected static final String ANY = "Any amount ";
     protected static final String TRACES = "Traces ";
     protected static final String NONE = "None ";
@@ -36,7 +33,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     protected static final int MAX_NO_OF_CONDITIONS = 100;
 
-    protected static final int OPTIONS = 3;
+    private int id;
+
+    private Profile p;
 
 
     private static int totalLength = Reference.tertiaryFieldNames.length + Reference.binaryFieldNames.length;
@@ -48,6 +47,11 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        Intent intent = getIntent();
+        id = intent.getIntExtra(ChooseProfile.ID_EXTRA, -1);
+
+        p = ProfileManager.getProfile(id);
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("C1A7B53B5BDF37B0263E126071DF1D81").build();
@@ -86,7 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void about() {
-        Intent intent = new Intent(this, AboutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent intent = new Intent(this, About.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
@@ -96,12 +100,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void switchToReconfirm() {
-        Intent intent = new Intent(this, rossrkk.food_alert_android.DisplayMessageActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent intent = new Intent(this, Reconfirm.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
     public void switchToMain() {
-        Intent intent = new Intent(this, rossrkk.food_alert_android.MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent intent = new Intent(this, Main.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
@@ -111,23 +115,9 @@ public class ProfileActivity extends AppCompatActivity {
     public void submit() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        SharedPreferences.Editor editor = sharedPref.edit();
-        //submit the fields to the thing
-        int index = 0;
+        ProfileManager.saveProfiles(sharedPref);
 
-
-        for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
-            editor.putInt(Reference.binaryFieldNames[i], profile[index]);
-            editor.commit();
-            index++;
-        }
-
-        for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
-            editor.putInt(Reference.tertiaryFieldNames[i], profile[index]);
-            editor.commit();
-            index++;
-        }
-        Reference.canEat = Reference.compareToProfile();
+        Reference.canEat = ProfileManager.compareToProfiles();
         updateBackground();
     }
 
@@ -146,8 +136,8 @@ public class ProfileActivity extends AppCompatActivity {
         //loop through each intolerance we use
         int index = 0;
         for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
-            //get the saved value of the profile
-            profile[index] = sharedPref.getInt(Reference.binaryFieldNames[i], defaultValue);
+            //get the saved value of the p.getSettings()
+            p.getSettings()[index] = sharedPref.getInt(Reference.binaryFieldNames[i], defaultValue);
 
             //create a new table row
             TableRow row = new TableRow(this);
@@ -174,8 +164,8 @@ public class ProfileActivity extends AppCompatActivity {
             group.addView(no);
 
 
-            //turn on the previous settings
-            switch (profile[index]) {
+            //turn on the previous p.getSettings()
+            switch (p.getSettings()[index]) {
                 case Reference.ANY:
                     no.toggle();
                     break;
@@ -206,8 +196,8 @@ public class ProfileActivity extends AppCompatActivity {
                             amount = Reference.ANY;
                             break;
                     }
-                    //set this in the profile array
-                    profile[row] = amount;
+                    //set this in the p.getSettings() array
+                    p.getSettings()[row] = amount;
                     submit();
                 }
             });
@@ -215,8 +205,8 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
-            //get the saved value of the profile
-            profile[index] = sharedPref.getInt(Reference.tertiaryFieldNames[i], defaultValue);
+            //get the saved value of the p.getSettings()
+            p.getSettings()[index] = sharedPref.getInt(Reference.tertiaryFieldNames[i], defaultValue);
 
             //create a new table row
             TableRow row = new TableRow(this);
@@ -246,8 +236,8 @@ public class ProfileActivity extends AppCompatActivity {
             group.addView(none);
 
 
-            //turn on the previous settings
-            switch (profile[index]) {
+            //turn on the previous p.getSettings()
+            switch (p.getSettings()[index]) {
                 case Reference.ANY:
                     any.toggle();
                     break;
@@ -287,8 +277,8 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                     //figure out the row the radio butto
 
-                    //set this in the profile array
-                    profile[row] = amount;
+                    //set this in the p.getSettings() array
+                    p.getSettings()[row] = amount;
                     submit();
                 }
             });

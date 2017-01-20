@@ -1,4 +1,4 @@
-package rossrkk.food_alert_android;
+package rossrkk.food_alert_android.Activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,15 +8,12 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -35,16 +32,17 @@ import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
-import java.sql.Ref;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import rossrkk.food_alert_android.profile.ProfileActivity;
+import rossrkk.food_alert_android.R;
+import rossrkk.food_alert_android.Reference;
+import rossrkk.food_alert_android.profile.ProfileManager;
 import rossrkk.food_alert_android.request.DataObj;
 import rossrkk.food_alert_android.request.JSONify;
 
 
-public class MainActivity extends AppCompatActivity {
+public class Main extends AppCompatActivity {
     public static String AUTO_NAME = "rossrkk.food-alert.AUTO";
 
     /**
@@ -88,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("C1A7B53B5BDF37B0263E126071DF1D81").build();
         mAdView.loadAd(adRequest);
 
-        loadProfile();
+        ProfileManager.loadProfiles(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
 
         //for barcode scanning
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
@@ -150,37 +148,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reconfirm(boolean automatic) {
-        Intent intent = new Intent(this, rossrkk.food_alert_android.DisplayMessageActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent intent = new Intent(this, Reconfirm.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra(AUTO_NAME, automatic);
         startActivity(intent);
     }
 
     public void switchToProfile() {
-        Intent intent = new Intent(this, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent intent = new Intent(this, ChooseProfile.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
     public void about() {
-        Intent intent = new Intent(this, AboutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent intent = new Intent(this, About.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
-    }
-
-    public void loadProfile() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        //set the default value
-        int defaultValue = Reference.UNKNOWN;
-        int index = 0;
-
-        for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
-            Reference.profile[index] = sharedPref.getInt(Reference.binaryFieldNames[i], defaultValue);
-            index++;
-        }
-
-        for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
-            //get the saved value of the profile
-            Reference.profile[index] = sharedPref.getInt(Reference.tertiaryFieldNames[i], defaultValue);
-            index++;
-        }
     }
 
     public void setName(String name) {
@@ -241,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         Reference.data = data.getData();
         Reference.name = data.getName();
         Reference.reconfirm = data.getReconfirm();
-        Reference.canEat = Reference.compareToProfile();
+        Reference.canEat = ProfileManager.compareToProfiles();
         ((TextView)findViewById(R.id.name)).setText(Reference.name);
         updateBackground();
         if (data.getReconfirm() || !isComplete()) {

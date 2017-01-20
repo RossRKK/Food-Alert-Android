@@ -1,4 +1,4 @@
-package rossrkk.food_alert_android;
+package rossrkk.food_alert_android.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +11,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -28,7 +26,8 @@ import com.google.android.gms.ads.AdView;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import rossrkk.food_alert_android.profile.ProfileActivity;
+import rossrkk.food_alert_android.R;
+import rossrkk.food_alert_android.Reference;
 import rossrkk.food_alert_android.request.JSONify;
 
 import static rossrkk.food_alert_android.Reference.binaryFieldNames;
@@ -36,7 +35,7 @@ import static rossrkk.food_alert_android.Reference.data;
 import static rossrkk.food_alert_android.Reference.tertiaryFieldNames;
 import static rossrkk.food_alert_android.Reference.updateBackground;
 
-public class DisplayMessageActivity extends AppCompatActivity {
+public class Reconfirm extends AppCompatActivity {
 
     protected static final String ANY = "Contains Non-Trace Amounts";
     protected static final String TRACES = "Contains Traces";
@@ -61,7 +60,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);
 
         Intent intent = getIntent();
-        boolean auto = intent.getBooleanExtra(MainActivity.AUTO_NAME, false);
+        boolean auto = intent.getBooleanExtra(Main.AUTO_NAME, false);
         if (auto) {
             TextView title = (TextView)findViewById(R.id.title);
             title.setText(R.string.auto_title);
@@ -107,17 +106,17 @@ public class DisplayMessageActivity extends AppCompatActivity {
     }
 
     public void about() {
-        Intent intent = new Intent(this, AboutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent intent = new Intent(this, About.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
     public void switchToProfile() {
-        Intent intent = new Intent(this, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent intent = new Intent(this, ChooseProfile.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
     public void switchToHome() {
-        Intent intent = new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent intent = new Intent(this, Main.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
