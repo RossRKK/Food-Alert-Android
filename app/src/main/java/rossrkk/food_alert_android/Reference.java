@@ -33,7 +33,6 @@ public class Reference {
     public static final String BASE_URL = "http://food-alert.herokuapp.com";
     public static final String NAME_FIELD = "name";
 
-    public static int[] profile = new int[tertiaryFieldNames.length + binaryFieldNames.length];
     public static int canEat = -1;
     public static String ean;
     public static String name;

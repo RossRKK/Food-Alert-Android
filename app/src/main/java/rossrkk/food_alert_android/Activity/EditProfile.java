@@ -9,6 +9,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -46,7 +47,6 @@ public class EditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
         Intent intent = getIntent();
         id = intent.getIntExtra(ChooseProfile.ID_EXTRA, -1);
@@ -75,6 +75,7 @@ public class EditProfile extends AppCompatActivity {
                                 switchToMain();
                                 break;
                             case R.id.action_profile:
+                                switchToChooseProfile();
                                 break;
                             case R.id.action_reconfirm:
                                 switchToReconfirm();
@@ -109,26 +110,32 @@ public class EditProfile extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void switchToChooseProfile() {
+        Intent intent = new Intent(this, ChooseProfile.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+    }
+
     /**
      * The action that is taken when the submit button is pressed
      */
-    public void submit() {
+    public void submit(View view) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        EditText nameBox = (EditText)findViewById(R.id.name);
+        p.setName(nameBox.getText().toString());
 
         ProfileManager.saveProfiles(sharedPref);
 
         Reference.canEat = ProfileManager.compareToProfiles();
         updateBackground();
+        switchToChooseProfile();
     }
 
     /**
      * Initialise the activity with a table of all of the options
      */
     public void init() {
-        //get the preferences handler
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        //set the default value
-        int defaultValue = Reference.UNKNOWN;
+        EditText nameBox = (EditText)findViewById(R.id.name);
+        nameBox.setText(p.getName());
 
         //create a new Table
         TableLayout ll = (TableLayout) findViewById(R.id.table);
@@ -136,8 +143,6 @@ public class EditProfile extends AppCompatActivity {
         //loop through each intolerance we use
         int index = 0;
         for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
-            //get the saved value of the p.getSettings()
-            p.getSettings()[index] = sharedPref.getInt(Reference.binaryFieldNames[i], defaultValue);
 
             //create a new table row
             TableRow row = new TableRow(this);
@@ -197,16 +202,13 @@ public class EditProfile extends AppCompatActivity {
                             break;
                     }
                     //set this in the p.getSettings() array
-                    p.getSettings()[row] = amount;
-                    submit();
+                    p.setSetting(row, amount);
                 }
             });
             index++;
         }
 
         for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
-            //get the saved value of the p.getSettings()
-            p.getSettings()[index] = sharedPref.getInt(Reference.tertiaryFieldNames[i], defaultValue);
 
             //create a new table row
             TableRow row = new TableRow(this);
@@ -278,8 +280,7 @@ public class EditProfile extends AppCompatActivity {
                     //figure out the row the radio butto
 
                     //set this in the p.getSettings() array
-                    p.getSettings()[row] = amount;
-                    submit();
+                    p.setSetting(row, amount);
                 }
             });
             index++;

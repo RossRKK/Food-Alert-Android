@@ -77,6 +77,7 @@ public class JSONify {
             out += Reference.tertiaryFieldNames[i] + "=" + data[index];
             index++;
         }
+        System.out.println(out);
         return out;
     }
 }

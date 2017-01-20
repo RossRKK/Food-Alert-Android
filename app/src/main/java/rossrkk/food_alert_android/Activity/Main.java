@@ -77,7 +77,7 @@ public class Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ping(); //ping the server in case it needs to wake up
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        ProfileManager.loadProfiles(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
 
         //setup the ad
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-5158131601481362/3995936333");

@@ -15,8 +15,8 @@ import static rossrkk.food_alert_android.Reference.tertiaryFieldNames;
 
 public class ProfileManager {
     private static final String LAST_ID_FIELD = "rossrkk.food_alert_android.profile.LAST_ID";
+    static final String FIELD_BASE = "rossrkk.food_alert_android.profile.";
     private static ArrayList<Profile> profiles = new ArrayList<Profile>();
-    private static int lastId;
     private static int defaultValue = Reference.UNKNOWN;
     private static String defaultValueName = "Unknown Name";
 
@@ -27,10 +27,12 @@ public class ProfileManager {
     public static void saveProfiles(SharedPreferences sharedPref) {
         SharedPreferences.Editor editor = sharedPref.edit();
 
-        editor.putInt(LAST_ID_FIELD, lastId);
+        System.out.println("Setting number of profiles to: " + profiles.size());
+        editor.putInt(LAST_ID_FIELD, profiles.size());
+        editor.commit();
 
         for (int i = 0; i < profiles.size(); i++) {
-            profiles.get(i).save(sharedPref);
+            profiles.get(i).save(i, editor);
         }
     }
 
@@ -39,12 +41,12 @@ public class ProfileManager {
      * @param sharedPref The shared preferences to be used
      */
     public static void loadProfiles(SharedPreferences sharedPref) {
-        int id = 0;
-        lastId = sharedPref.getInt(LAST_ID_FIELD, 0);
-        for (int i = 0; i < lastId; i++) {
-            profiles.add(loadProfile(id, sharedPref));
+        if (profiles.isEmpty()) {
+            int length = sharedPref.getInt(LAST_ID_FIELD, 0);
+            for (int i = 0; i < length; i++) {
+               loadProfile(i, sharedPref);
+            }
         }
-        lastId = id;
     }
 
     /**
@@ -55,20 +57,20 @@ public class ProfileManager {
      */
     private static Profile loadProfile(int id, SharedPreferences sharedPref) {
         try {
-            String name = sharedPref.getString(Reference.NAME_FIELD, defaultValueName);
+            String name = sharedPref.getString(Reference.NAME_FIELD + id, defaultValueName);
 
             int[] settings = new int[tertiaryFieldNames.length + binaryFieldNames.length];
             int index = 0;
             for (int i = 0; i < binaryFieldNames.length; i++) {
-                settings[index] = sharedPref.getInt(id + Reference.binaryFieldNames[i], defaultValue);
+                settings[index] = sharedPref.getInt(FIELD_BASE + id + Reference.binaryFieldNames[i], defaultValue);
                 index++;
             }
 
             for (int i = 0; i < tertiaryFieldNames.length; i++) {
-                settings[index] = sharedPref.getInt(id + Reference.tertiaryFieldNames[i], defaultValue);
+                settings[index] = sharedPref.getInt(FIELD_BASE + id + Reference.tertiaryFieldNames[i], defaultValue);
                 index++;
             }
-            return new Profile(id, name, settings);
+            return new Profile(name, settings);
         } catch (Exception e) {
             System.out.println("There was an error loading the profile with ID: " + id);
             return null;
@@ -81,12 +83,7 @@ public class ProfileManager {
      * @return The profile with that ID
      */
     public static Profile getProfile(int id) {
-        for (int i = 0; i < profiles.size(); i++) {
-            if (profiles.get(i).getId() == id) {
-                return profiles.get(i);
-            }
-        }
-        return null;
+        return profiles.get(id);
     }
 
     /**
@@ -111,19 +108,14 @@ public class ProfileManager {
     }
 
     /**
-     * Return the next id
-     * @return The enxt id
-     */
-    public static int nextId() {
-        lastId ++;
-        return lastId;
-    }
-
-    /**
      * Add a profile to the profile manager
      * @param p The profle to be added
      */
     public static void addProfile(Profile p) {
         profiles.add(p);
+    }
+
+    public static int getLength() {
+        return profiles.size();
     }
 }

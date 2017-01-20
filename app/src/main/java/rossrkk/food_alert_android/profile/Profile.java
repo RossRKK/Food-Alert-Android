@@ -4,8 +4,6 @@ import android.content.SharedPreferences;
 
 import rossrkk.food_alert_android.Reference;
 
-import static rossrkk.food_alert_android.Reference.profile;
-
 /**
  * Created by rossrkk on 19/01/17.
  */
@@ -13,16 +11,13 @@ import static rossrkk.food_alert_android.Reference.profile;
 public class Profile {
     private int[] settings;
     private String name;
-    private int id;
 
     /**
      * Create a new profile
-     * @param id The id of the new profile
      * @param name The name of the new profile
      * @param settings The settings array of the new profile
      */
-    public Profile(int id, String name, int[] settings) {
-        this.id = id;
+    public Profile(String name, int[] settings) {
         this.name = name;
         this.settings = settings;
         ProfileManager.addProfile(this);
@@ -42,14 +37,6 @@ public class Profile {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Get the ID of the profile
-     * @return The id of the profile
-     */
-    public int getId() {
-        return id;
     }
 
     /**
@@ -83,26 +70,33 @@ public class Profile {
 
     /**
      * Save the profile to the disk
-     * @param sharedPref The sharedpref to be used to save the profile
+     * @param editor The sharedpref editor to be used to save the profile
      */
-    public void save(SharedPreferences sharedPref) {
-        SharedPreferences.Editor editor = sharedPref.edit();
+    public void save(int id, SharedPreferences.Editor editor) {
 
-        editor.putString(id + Reference.NAME_FIELD, name);
+        editor.putString(Reference.NAME_FIELD + id, name);
 
         //submit the fields to the thing
         int index = 0;
 
         for (int i = 0; i < Reference.binaryFieldNames.length; i++) {
-            editor.putInt(id + Reference.binaryFieldNames[i], profile[index]);
+            editor.putInt(ProfileManager.FIELD_BASE + id + Reference.binaryFieldNames[i], settings[index]);
             editor.commit();
             index++;
         }
 
         for (int i = 0; i < Reference.tertiaryFieldNames.length; i++) {
-            editor.putInt(id + Reference.tertiaryFieldNames[i], profile[index]);
+            editor.putInt(ProfileManager.FIELD_BASE + id + Reference.tertiaryFieldNames[i], settings[index]);
             editor.commit();
             index++;
         }
+    }
+
+    public void setSetting(int row, int amount) {
+        settings[row] = amount;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

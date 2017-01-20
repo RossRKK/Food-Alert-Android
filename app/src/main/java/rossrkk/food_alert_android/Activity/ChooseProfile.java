@@ -1,19 +1,30 @@
 package rossrkk.food_alert_android.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import rossrkk.food_alert_android.R;
 import rossrkk.food_alert_android.Reference;
+import rossrkk.food_alert_android.profile.Profile;
+import rossrkk.food_alert_android.profile.ProfileManager;
 
 public class ChooseProfile extends AppCompatActivity {
 
@@ -33,6 +44,10 @@ public class ChooseProfile extends AppCompatActivity {
 
         View view = bottomNavigationView.findViewById(R.id.action_profile);
         view.performClick();
+
+        init();
+
+        updateBackground();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -63,7 +78,7 @@ public class ChooseProfile extends AppCompatActivity {
     }
 
     public void updateBackground() {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.profile_layout);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.choose_profile);
         Reference.updateBackground(layout);
     }
 
@@ -75,5 +90,57 @@ public class ChooseProfile extends AppCompatActivity {
     public void switchToMain() {
         Intent intent = new Intent(this, Main.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+    }
+
+    public void switchToEdit(int id) {
+        Intent intent = new Intent(this, EditProfile.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.putExtra(ID_EXTRA, id);
+        startActivity(intent);
+    }
+
+    public void addProfile(View view) {
+        Intent intent = new Intent(this, EditProfile.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.putExtra(ID_EXTRA, ProfileManager.getLength());
+
+        new Profile("Enter Name", new int[Reference.binaryFieldNames.length + Reference.tertiaryFieldNames.length]);
+
+        startActivity(intent);
+    }
+
+    /**
+     * Initialise the activity with a table of all of the options
+     */
+    public void init() {
+        //create a new Table
+        TableLayout ll = (TableLayout) findViewById(R.id.table);
+
+        //loop through each intolerance we use
+        for (int i = 0; i < ProfileManager.getLength(); i++) {
+            //create a new table row
+            TableRow row = new TableRow(this);
+
+            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT);
+            row.setLayoutParams(lp);
+
+            //create a new text view
+            TextView tv = new TextView(this);
+            tv.setText(ProfileManager.getProfile(i).getName());
+
+            //Create the edit button
+            Button clickButton = new Button(this);
+            clickButton.setText("Edit");
+            clickButton.setId(i);
+            clickButton.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switchToEdit(v.getId());
+                }
+            });
+
+            row.addView(tv);
+            row.addView(clickButton);
+
+            ll.addView(row);
+         }
     }
 }
