@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_results"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/profile_layout">
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    tools:context="rossrkk.food_alert_android.activity.SearchResults">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-            android:text="@string/profile_screen_title"
-            android:paddingBottom="20sp"/>
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/name"
+            <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        <TableLayout
-            android:id="@+id/table"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></TableLayout>
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+                android:text="@string/results_title"
+                android:paddingBottom="20sp"/>
+
+            <TableLayout
+                android:id="@+id/table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></TableLayout>
         </LinearLayout>
     </ScrollView>
     <LinearLayout
@@ -39,12 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
-        <Button android:id="@+id/push_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/button_submit"
-            android:onClick="submit"
-            android:background="@color/colorAccent"/>
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"
@@ -61,4 +53,5 @@
             app:itemTextColor="@color/white"
             app:menu="@menu/bottom_navigation_main" />
     </LinearLayout>
+
 </LinearLayout>

@@ -77,6 +77,22 @@ public class ChooseProfile extends AppCompatActivity {
     public void updateBackground() {
         LinearLayout layout = (LinearLayout) findViewById(R.id.choose_profile);
         Reference.updateBackground(layout);
+
+        for (int i = 0; i < ProfileManager.getLength(); i++) {
+            int canEat = ProfileManager.getProfile(i).comapreToData();
+            TableRow row = (TableRow)findViewById(i);
+            switch (canEat) {
+                case Reference.COMPATIBLE:
+                    row.setBackgroundColor(Reference.GREEN);
+                    break;
+                case Reference.INCOMPATIBLE:
+                    row.setBackgroundColor(Reference.RED);
+                    break;
+                case Reference.UNKNOWN:
+                    row.setBackgroundColor(Reference.YELLOW);
+                    break;
+            }
+        }
     }
 
     public void switchToReconfirm() {
@@ -123,6 +139,7 @@ public class ChooseProfile extends AppCompatActivity {
 
             TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT);
             row.setLayoutParams(lp);
+            row.setId(i);
 
             //create a new text view
             TextView tv = new TextView(this);

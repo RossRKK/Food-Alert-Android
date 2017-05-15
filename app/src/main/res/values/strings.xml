@@ -12,7 +12,7 @@
     <string name="scan">Scan</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_reconfirm">Edit Data</string>
-    <string name="menu_profile">Edit Profile</string>
+    <string name="menu_profile">Profiles</string>
     <string name="menu_home">Home</string>
     <string name="please_wait">Please Wait...</string>
     <string name="auto_title">Please confirm the details of this product:</string>
@@ -23,4 +23,9 @@
     <string name="data_policy">All personal data about the user is stored locally on this phone, excluding data used by Google for advertising. You can read Google\'s privacy policy for partnered ads <a href="http://www.google.com/policies/privacy/partners/">here</a>.</string>
     <string name="choose_profile_title">Select a profile to edit:</string>
     <string name="button_add">Add a new Profile</string>
+    <string name="title_activity_search_results">SearchResults</string>
+    <string name="title_activity_food_service_info">FoodServiceInfo</string>
+    <string name="search">Search for a restaurant or cafe</string>
+    <string name="search_button">Search</string>
+    <string name="results_title">Results</string>
 </resources>

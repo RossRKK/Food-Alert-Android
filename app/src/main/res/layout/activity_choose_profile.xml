@@ -41,7 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/button_add"
-            android:onClick="addProfile"/>
+            android:onClick="addProfile"
+            android:background="@color/colorAccent"/>
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"

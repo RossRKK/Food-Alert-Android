@@ -34,7 +34,15 @@
             android:name=".activity.About"
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activity.ChooseProfile"></activity>
+        <activity android:name=".activity.ChooseProfile" />
+        <activity
+            android:name=".activity.SearchResults"
+            android:label="@string/title_activity_search_results"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.FoodServiceInfo"
+            android:label="@string/title_activity_food_service_info"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

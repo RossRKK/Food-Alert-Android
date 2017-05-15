@@ -134,7 +134,7 @@ public class Reconfirm extends AppCompatActivity {
         }
         String encodedData = JSONify.encode(name, data);
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = Reference.BASE_URL + "/" + Reference.ean + encodedData;
+        String url = Reference.BASE_URL + "b/" + Reference.ean + encodedData;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, url,

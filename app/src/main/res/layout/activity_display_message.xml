@@ -40,10 +40,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <Button android:id="@+id/push_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_submit"
-        android:onClick="submit"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_submit"
+            android:onClick="submit"
+            android:background="@color/colorAccent"/>
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"

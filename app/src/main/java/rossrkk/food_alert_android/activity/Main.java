@@ -43,6 +43,7 @@ import rossrkk.food_alert_android.request.JSONify;
 
 public class Main extends AppCompatActivity {
     public static String AUTO_NAME = "rossrkk.food-alert.AUTO";
+    public static String QUERY = "rossrkk.food-alert.QUERY";
 
     /**
      * Code that handles the barcodde scanner
@@ -135,6 +136,13 @@ public class Main extends AppCompatActivity {
         Reference.updateBackground(layout);
     }
 
+    public void search(View view) {
+        Intent intent = new Intent(this, SearchResults.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        EditText editText = (EditText) findViewById(R.id.edit_message);
+        intent.putExtra(QUERY, editText.getText().toString());
+        startActivity(intent);
+    }
+
     public void sendMessage(View view) {
         View v = this.getCurrentFocus();
         if (v != null) {
@@ -168,7 +176,7 @@ public class Main extends AppCompatActivity {
 
     public void ping() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = Reference.BASE_URL;
+        String url = Reference.BASE_URL + "b";
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -195,7 +203,7 @@ public class Main extends AppCompatActivity {
     public void get(String message) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = Reference.BASE_URL + "/" + message;
+        String url = Reference.BASE_URL + "b/" + message;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -225,6 +233,8 @@ public class Main extends AppCompatActivity {
         updateBackground();
         if (data.getReconfirm() || !isComplete()) {
             reconfirm(true);
+        } else {
+            switchToProfile();
         }
     }
 
