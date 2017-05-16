@@ -88,31 +88,29 @@ public class FoodServiceInfo extends AppCompatActivity {
         TextView description = (TextView) findViewById(R.id.desc);
         description.setText(result.getDescription());
 
-        TableLayout ll = (TableLayout) findViewById(R.id.table);
+        LinearLayout ll = (LinearLayout) findViewById(R.id.list);
 
         for (int i = 0; i < menu.size(); i++) {
             //print the item if it's compatible with the master profile
             if (ProfileManager.getProfile(ProfileManager.masterProfile).comapreToData(result.getMenu().get(i).getData(), false) == Reference.COMPATIBLE) {
                 //create a new table row
-                TableRow row = new TableRow(this);
 
-                TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT);
+                /*TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT);
                 row.setLayoutParams(lp);
-                row.setId(i);
+                row.setId(i);*/
 
                 //create a new text view
                 TextView tv = new TextView(this);
                 tv.setText(menu.get(i).getName());
                 tv.setTextSize(20f);
-                tv.setTextColor(255);
-                row.addView(tv);
+                ll.addView(tv);
 
                 TextView desc = new TextView(this);
                 desc.setText(menu.get(i).getDescription());
                 desc.setTextSize(12f);
-                row.addView(desc);
+                ll.addView(desc);
 
-                ll.addView(row);
+                //ll.addView(row);
             }
         }
     }

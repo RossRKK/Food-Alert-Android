@@ -29,10 +29,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <TableLayout
-                android:id="@+id/table"
+            <LinearLayout
+                android:id="@+id/list"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></TableLayout>
+                android:layout_height="wrap_content"></LinearLayout>
         </LinearLayout>
     </ScrollView>
     <LinearLayout
