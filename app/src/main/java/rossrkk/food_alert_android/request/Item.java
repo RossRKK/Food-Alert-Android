@@ -4,7 +4,7 @@ package rossrkk.food_alert_android.request;
  * Created by rossrkk on 15/05/17.
  */
 
-public class Item {
+public class Item implements Comparable<Item> {
     private String name;
     private String description;
     private String category;
@@ -30,5 +30,14 @@ public class Item {
 
     public int[] getData() {
         return data;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    @Override
+    public int compareTo(Item item) {
+        return category.compareTo(item.category);
     }
 }

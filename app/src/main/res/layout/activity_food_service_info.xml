@@ -33,7 +33,8 @@
                 android:id="@+id/list"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></LinearLayout>
+                android:layout_height="wrap_content"
+                android:padding="5sp"/>
         </LinearLayout>
     </ScrollView>
     <LinearLayout

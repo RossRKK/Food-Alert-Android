@@ -28,7 +28,7 @@ public class Reference {
     public static final int YELLOW = Color.rgb(248, 205, 111);
     public static final int RED = Color.rgb(247, 117, 177);
 
-    //public static final String BASE_URL = "http://food-alert.herokuapp.com/b";
+    public static final String BASE_URL = "http://food-alert.herokuapp.com/";
     public static final String NAME_FIELD = "name";
 
     public static int canEat = -1;
@@ -50,5 +50,5 @@ public class Reference {
                 break;
         }
     }
-    public static final String BASE_URL = "http://138.251.249.141:8080/";
+    //public static final String BASE_URL = "http://138.251.249.141:8080/";
 }

@@ -8,6 +8,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -21,6 +22,7 @@ import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import rossrkk.food_alert_android.R;
 import rossrkk.food_alert_android.Reference;
@@ -78,10 +80,24 @@ public class FoodServiceInfo extends AppCompatActivity {
 
     }
 
+    ArrayList<LinearLayout> categories = new ArrayList<LinearLayout>();
+
     private void displayResults(int index) {
         Service result = SearchResults.results.get(index);
-        ArrayList<Item> menu = result.getMenu();
+        ArrayList<Item> rawMenu = result.getMenu();
+        ArrayList<Item> menu = new ArrayList<Item>();
 
+        //filter the menu
+        for (Item i:rawMenu) {
+            if (ProfileManager.getProfile(ProfileManager.masterProfile).comapreToData(i.getData(), false) == Reference.COMPATIBLE) {
+                menu.add(i);
+            }
+        }
+
+        //sort the menu by category
+        Collections.sort(menu);
+
+        //enter the title and description of the service
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(result.getName());
 
@@ -90,28 +106,49 @@ public class FoodServiceInfo extends AppCompatActivity {
 
         LinearLayout ll = (LinearLayout) findViewById(R.id.list);
 
+        String prevCat = null;
+        int catNo = -1;
+        LinearLayout curCat = new LinearLayout(this);
         for (int i = 0; i < menu.size(); i++) {
-            //print the item if it's compatible with the master profile
-            if (ProfileManager.getProfile(ProfileManager.masterProfile).comapreToData(result.getMenu().get(i).getData(), false) == Reference.COMPATIBLE) {
-                //create a new table row
 
-                /*TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT);
-                row.setLayoutParams(lp);
-                row.setId(i);*/
+            //group the menu into categories
+            if (!menu.get(i).getCategory().equalsIgnoreCase(prevCat)) {
+                prevCat = menu.get(i).getCategory();
+                catNo++;
+                ll.addView(curCat);
+                curCat = new LinearLayout(this);
+                curCat.setOrientation(LinearLayout.VERTICAL);
+                curCat.setVisibility(LinearLayout.GONE);
+                categories.add(curCat);
 
-                //create a new text view
                 TextView tv = new TextView(this);
-                tv.setText(menu.get(i).getName());
-                tv.setTextSize(20f);
+                tv.setId(catNo);
+                tv.setText(" ● " + menu.get(i).getCategory());
+                tv.setTextSize(24f);
+
+                tv.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        View cat = categories.get(v.getId());
+                        cat.setVisibility(cat.isShown()
+                                ? View.GONE
+                                : View.VISIBLE);
+                    }
+                });
+
                 ll.addView(tv);
-
-                TextView desc = new TextView(this);
-                desc.setText(menu.get(i).getDescription());
-                desc.setTextSize(12f);
-                ll.addView(desc);
-
-                //ll.addView(row);
             }
+
+            //create a new text view
+            TextView tv = new TextView(this);
+            tv.setText(" ○ " + menu.get(i).getName());
+            tv.setTextSize(20f);
+            curCat.addView(tv);
+
+            TextView desc = new TextView(this);
+            desc.setText(menu.get(i).getDescription());
+            desc.setTextSize(12f);
+            curCat.addView(desc);
         }
     }
 
