@@ -50,5 +50,5 @@ public class Reference {
                 break;
         }
     }
-    public static final String BASE_URL = "http://138.251.254.42:8080/";
+    public static final String BASE_URL = "http://138.251.249.141:8080/";
 }

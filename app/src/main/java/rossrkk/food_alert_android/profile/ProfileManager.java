@@ -19,6 +19,8 @@ public class ProfileManager {
     private static ArrayList<Profile> profiles = new ArrayList<Profile>();
     private static int defaultValue = Reference.UNKNOWN;
     private static String defaultValueName = "Unknown Name";
+    //the default profile, the one that should be used when filtering menus
+    public static int masterProfile = 0;
 
     /**
      * Saves all profiles
@@ -94,7 +96,7 @@ public class ProfileManager {
     public static int compareToProfiles() {
         int result = Reference.UNKNOWN;
         for (int i = 0; i < profiles.size(); i++) {
-            int cur = profiles.get(i).comapreToData();
+            int cur = profiles.get(i).comapreToData(Reference.data, Reference.reconfirm);
 
             if (cur == Reference.INCOMPATIBLE) {
                 return Reference.INCOMPATIBLE;

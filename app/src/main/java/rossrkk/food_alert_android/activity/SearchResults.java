@@ -89,7 +89,6 @@ public class SearchResults extends AppCompatActivity {
     public static ArrayList<Service> results;
 
     private void displayResults(String json) {
-        System.err.println(json);
         results = JSONify.parseResults(json);
 
         TableLayout ll = (TableLayout) findViewById(R.id.table);

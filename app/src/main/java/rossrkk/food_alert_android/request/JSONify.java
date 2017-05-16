@@ -51,11 +51,11 @@ public class JSONify {
 
                     int index = 0;
                     for (String field:Reference.tertiaryFieldNames) {
-                        data[index] = item.getInt(field, Reference.UNKNOWN);
+                        data[index] = item.getInt(field);
                         index++;
                     }
                     for (String field:Reference.binaryFieldNames) {
-                        data[index] = item.getInt(field, Reference.UNKNOWN);
+                        data[index] = item.getInt(field);
                         index++;
                     }
 

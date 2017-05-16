@@ -79,7 +79,7 @@ public class ChooseProfile extends AppCompatActivity {
         Reference.updateBackground(layout);
 
         for (int i = 0; i < ProfileManager.getLength(); i++) {
-            int canEat = ProfileManager.getProfile(i).comapreToData();
+            int canEat = ProfileManager.getProfile(i).comapreToData(Reference.data, Reference.reconfirm);
             TableRow row = (TableRow)findViewById(i);
             switch (canEat) {
                 case Reference.COMPATIBLE:

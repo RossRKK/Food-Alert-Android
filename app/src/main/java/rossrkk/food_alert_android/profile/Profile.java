@@ -43,24 +43,24 @@ public class Profile {
      * Return whether the person this profile describes can eat the product
      * @return The code relevant to whether this person can eat the current product
      */
-    public int comapreToData() {
-        if (Reference.data != null && !Reference.reconfirm) {
+    public int comapreToData(int[] data, boolean reconfirm) {
+        if (data != null && !reconfirm) {
             for (int i = 0; i < settings.length; i++) {
                 //if the person is intolerant and the data is unknown return unknown
-                if ((settings[i] == Reference.NONE || settings[i] == Reference.TRACE) && Reference.data[i] == Reference.UNKNOWN) {
+                if ((settings[i] == Reference.NONE || settings[i] == Reference.TRACE) && data[i] == Reference.UNKNOWN) {
                     return Reference.UNKNOWN;
                 }
 
                 //if the data matches the profiles tolerances
-                if (settings[i] == Reference.NONE && (Reference.data[i] == Reference.TRACE || Reference.data[i] == Reference.ANY)) {
+                if (settings[i] == Reference.NONE && (data[i] == Reference.TRACE || data[i] == Reference.ANY)) {
                     return Reference.INCOMPATIBLE;
-                } else if (settings[i] == Reference.TRACE && Reference.data[i] == Reference.ANY) {
+                } else if (settings[i] == Reference.TRACE && data[i] == Reference.ANY) {
                     return Reference.INCOMPATIBLE;
                 }
             }
             return Reference.COMPATIBLE;
         } else {
-            if (Reference.reconfirm) {
+            if (reconfirm) {
                 return Reference.UNKNOWN;
             } else {
                 return -1;

@@ -23,18 +23,19 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import rossrkk.food_alert_android.R;
+import rossrkk.food_alert_android.Reference;
+import rossrkk.food_alert_android.profile.ProfileManager;
 import rossrkk.food_alert_android.request.Item;
 import rossrkk.food_alert_android.request.Service;
 
 
 import static rossrkk.food_alert_android.Reference.updateBackground;
-import static rossrkk.food_alert_android.activity.SearchResults.results;
 
 public class FoodServiceInfo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_results);
+        setContentView(R.layout.activity_food_service_info);
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("C1A7B53B5BDF37B0263E126071DF1D81").build();
@@ -78,37 +79,41 @@ public class FoodServiceInfo extends AppCompatActivity {
     }
 
     private void displayResults(int index) {
-        Service result = results.get(index);
+        Service result = SearchResults.results.get(index);
         ArrayList<Item> menu = result.getMenu();
 
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(result.getName());
 
-        /*TextView description = (TextView) findViewById(R.id.desc);
-        description.setText(result.getDescription());*/
+        TextView description = (TextView) findViewById(R.id.desc);
+        description.setText(result.getDescription());
 
         TableLayout ll = (TableLayout) findViewById(R.id.table);
 
         for (int i = 0; i < menu.size(); i++) {
-            //create a new table row
-            TableRow row = new TableRow(this);
+            //print the item if it's compatible with the master profile
+            if (ProfileManager.getProfile(ProfileManager.masterProfile).comapreToData(result.getMenu().get(i).getData(), false) == Reference.COMPATIBLE) {
+                //create a new table row
+                TableRow row = new TableRow(this);
 
-            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT);
-            row.setLayoutParams(lp);
-            row.setId(i);
+                TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT);
+                row.setLayoutParams(lp);
+                row.setId(i);
 
-            //create a new text view
-            TextView tv = new TextView(this);
-            tv.setText(menu.get(i).getName());
-            tv.setTextSize(20f);
-            row.addView(tv);
+                //create a new text view
+                TextView tv = new TextView(this);
+                tv.setText(menu.get(i).getName());
+                tv.setTextSize(20f);
+                tv.setTextColor(255);
+                row.addView(tv);
 
-            TextView desc = new TextView(this);
-            tv.setText(menu.get(i).getDescription());
-            tv.setTextSize(12f);
-            row.addView(desc);
+                TextView desc = new TextView(this);
+                desc.setText(menu.get(i).getDescription());
+                desc.setTextSize(12f);
+                row.addView(desc);
 
-            ll.addView(row);
+                ll.addView(row);
+            }
         }
     }
 
